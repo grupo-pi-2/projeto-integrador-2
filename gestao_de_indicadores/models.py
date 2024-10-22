@@ -7,3 +7,12 @@ class Setor(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
+    
+class Indicador(models.Model):
+    nome = models.CharField(max_length=50)
+    tipo_de_tempo_limite = models.CharField(max_length=10)
+    tempo_limite = models.PositiveIntegerField()
+    setor = models.ForeignKey(Setor, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(model_to_dict(self))
