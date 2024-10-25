@@ -29,14 +29,14 @@ body {
 
 @media (max-width: 768px) {
   .table-stacked thead {
-    display: none; /* Esconde o cabeçalho em telas pequenas */
+    display: none;
   }
 
   .table-stacked tbody td {
-    display: block; /* Cada célula é exibida como um bloco */
-    width: 100%;    /* Ocupar 100% da largura */
+    display: block;
+    width: 100%;
     position: relative;
-    padding-left: 40%; /* Espaço para exibir o cabeçalho */
+    padding-left: 40%;
     text-align: left;
     border-bottom: 1px solid #ddd;
     padding-top: 10px;
@@ -44,10 +44,10 @@ body {
   }
 
   .table-stacked tbody td::before {
-    content: attr(data-th); /* Insere o texto do cabeçalho antes do dado */
+    content: attr(data-th);
     position: absolute;
     left: 0;
-    width: 35%;  /* Largura para o cabeçalho */
+    width: 35%;
     padding-left: 10px;
     font-weight: bold;
     white-space: nowrap;
@@ -56,7 +56,7 @@ body {
   }
 
   .table-stacked tbody tr {
-    display: block; /* Cada linha é exibida como um bloco */
+    display: block;
     margin-bottom: 10px;
   }
 }
