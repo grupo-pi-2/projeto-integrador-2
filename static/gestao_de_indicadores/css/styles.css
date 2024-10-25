@@ -9,3 +9,63 @@ body {
 .nav-bar-style {
   padding-left: 12px;
 }
+
+/* painel de métricas */
+.bold-input {
+  font-weight: bold;
+}
+
+.icon-cadastrar {
+  font-size: 24px;
+  color: #6c757d;
+}
+
+/* tabela de serviços */
+.table-responsive {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .table-stacked thead {
+    display: none; /* Esconde o cabeçalho em telas pequenas */
+  }
+
+  .table-stacked tbody td {
+    display: block; /* Cada célula é exibida como um bloco */
+    width: 100%;    /* Ocupar 100% da largura */
+    position: relative;
+    padding-left: 40%; /* Espaço para exibir o cabeçalho */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .table-stacked tbody td::before {
+    content: attr(data-th); /* Insere o texto do cabeçalho antes do dado */
+    position: absolute;
+    left: 0;
+    width: 35%;  /* Largura para o cabeçalho */
+    padding-left: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    text-align: left;
+    color: #000;
+  }
+
+  .table-stacked tbody tr {
+    display: block; /* Cada linha é exibida como um bloco */
+    margin-bottom: 10px;
+  }
+}
+
+.icon-servico {
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.text-center {
+  text-align: center;
+}
