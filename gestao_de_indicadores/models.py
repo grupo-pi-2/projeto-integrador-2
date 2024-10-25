@@ -20,3 +20,13 @@ class Indicador(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
+    
+class Cliente(models.Model):
+    razao_social = models.CharField(max_length=150, blank=False)
+    cnpj = models.CharField(max_length=14, blank=False, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(model_to_dict(self))
+
