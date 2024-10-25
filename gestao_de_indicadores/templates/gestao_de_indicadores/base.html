@@ -13,14 +13,15 @@
   </head>
   <body>
     <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="/">
-      <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
-    </a>
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
+      </a>
     </nav>
     <div class="container-fluid">
       {% block content %}
       {% endblock %}
     </div>
     {% bootstrap_javascript %}
+    <script src="{% static 'gestao_de_indicadores/js/script.js' %}"></script>
   </body>
 </html>

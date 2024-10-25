@@ -1,75 +1,73 @@
-<div class="col-md-10">
-  <div class="card">
-    <div class="card-header">
-      <strong>
-        KPI - GESTÃO DA SEGURANÇA ({{ indicador.nome }})
-      </strong>
-    </div>
-    <div class="card-body">
-      <div class="d-flex flex-column flex-md-row justify-content-between">
-        <div class="form-group text-center mx-2 my-2">
-          <label><strong>Programados</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
-        </div>
-        <div class="form-group text-center mx-2 my-2">
-          <label><strong>Concluídos</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
-        </div>
-        <div class="form-group text-center mx-1 my-2">
-          <label><strong>%</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
-        </div>
-        <div class="form-group text-center mx-2 my-2">
-          <label><strong>Média (tempo)</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
-        </div>
-        <div class="form-group text-center mx-2 my-2">
-          <label><strong>Performance (L=7h)</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
-        </div>
-        <div class="form-group text-center mx-2 my-2">
-          <label><strong>YTD</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
-        </div>
-        <div class="form-group text-center mx-1 my-2">
-          <label></label>
-          <i class="fa-solid fa-file-circle-plus icon-cadastrar"></i>
-        </div>
+<div class="card">
+  <div class="card-header">
+    <strong>
+      KPI - GESTÃO DA SEGURANÇA ({{ indicador.nome }})
+    </strong>
+  </div>
+  <div class="card-body">
+    <div class="d-flex flex-column flex-md-row justify-content-between">
+      <div class="form-group text-center mx-2 my-2">
+        <label><strong>Programados</strong></label>
+        <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
       </div>
-      
-      <div class="d-flex flex-column mx-2 my-2 mt-4">
-        <div class="table-responsive">
-            <table class="table table-striped table-stacked">
-              <thead>
-                <tr>
-                  <th class="col-md-3" scope="col">Cliente</th>
-                  <th class="col-md-1" scope="col">Data</th>
-                  <th class="col-md-1" scope="col">Início (h)</th>
-                  <th class="col-md-1" scope="col">Término (h)</th>
-                  <th class="col-md-1" scope="col">Tempo (h)</th>
-                  <th class="col-md-1" scope="col">Status</th>
-                  <th class="col-md-1" scope="col">Período</th>
-                  <th class="col-md-1" scope="col">Responsável</th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="col-md-3" data-th="Cliente"></td>
-                  <td class="col-md-1" data-th="Data"></td>
-                  <td class="col-md-1" data-th="Início (h)"></td>
-                  <td class="col-md-1" data-th="Término (h)"></td>
-                  <td class="col-md-1" data-th="Tempo (h)"></td>
-                  <td class="col-md-1" data-th="Status"></td>
-                  <td class="col-md-1" data-th="Período"></td>
-                  <td class="col-md-1" data-th="Responsável"></td>
-                  <td class="col-md-1 text-center"><i class="fa-solid fa-pen-to-square icon-servico"></i></td>
-                  <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico"></i></td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
+      <div class="form-group text-center mx-2 my-2">
+        <label><strong>Concluídos</strong></label>
+        <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
+      </div>
+      <div class="form-group text-center mx-1 my-2">
+        <label><strong>%</strong></label>
+        <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
+      </div>
+      <div class="form-group text-center mx-2 my-2">
+        <label><strong>Média (tempo)</strong></label>
+        <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
+      </div>
+      <div class="form-group text-center mx-2 my-2">
+        <label><strong>Performance (L=7h)</strong></label>
+        <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
+      </div>
+      <div class="form-group text-center mx-2 my-2">
+        <label><strong>YTD</strong></label>
+        <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
+      </div>
+      <div class="form-group text-center mx-1 my-2">
+        <label></label>
+        <i class="fa-solid fa-file-circle-plus icon-cadastrar"></i>
+      </div>
+    </div>
+    
+    <div class="d-flex flex-column mx-2 my-2 mt-4">
+      <div class="table-responsive">
+          <table class="table table-striped table-stacked">
+            <thead>
+              <tr>
+                <th class="col-md-3" scope="col">Cliente</th>
+                <th class="col-md-1" scope="col">Data</th>
+                <th class="col-md-1" scope="col">Início (h)</th>
+                <th class="col-md-1" scope="col">Término (h)</th>
+                <th class="col-md-1" scope="col">Tempo (h)</th>
+                <th class="col-md-1" scope="col">Status</th>
+                <th class="col-md-1" scope="col">Período</th>
+                <th class="col-md-1" scope="col">Responsável</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-md-3" data-th="Cliente"></td>
+                <td class="col-md-1" data-th="Data"></td>
+                <td class="col-md-1" data-th="Início (h)"></td>
+                <td class="col-md-1" data-th="Término (h)"></td>
+                <td class="col-md-1" data-th="Tempo (h)"></td>
+                <td class="col-md-1" data-th="Status"></td>
+                <td class="col-md-1" data-th="Período"></td>
+                <td class="col-md-1" data-th="Responsável"></td>
+                <td class="col-md-1 text-center"><i class="fa-solid fa-pen-to-square icon-servico"></i></td>
+                <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico"></i></td>
+              </tr>
+            </tbody>
+          </table>
       </div>
     </div>
   </div>
