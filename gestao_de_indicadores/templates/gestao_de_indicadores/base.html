@@ -1,18 +1,23 @@
 {% load django_bootstrap5 static %}
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
+  <html lang="en">
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% bootstrap_css %}
     <link href="{% static 'gestao_de_indicadores/css/styles.css' %}" rel="stylesheet">
-</head>
-<body>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/">
+      <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
+    </a>
+    </nav>
     <div class="container-fluid">
-        {% block content %}
-        {% endblock %}
+      {% block content %}
+      {% endblock %}
     </div>
     {% bootstrap_javascript %}
-</body>
+  </body>
 </html>
