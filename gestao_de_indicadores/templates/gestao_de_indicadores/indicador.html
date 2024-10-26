@@ -19,11 +19,11 @@
         <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
       </div>
       <div class="form-group text-center mx-2 my-2">
-        <label><strong>Média (tempo)</strong></label>
+        <label><strong>Média ({{indicador.tipo_de_tempo_limite}})</strong></label>
         <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
       </div>
       <div class="form-group text-center mx-2 my-2">
-        <label><strong>Performance (L=7h)</strong></label>
+        <label><strong>Performance (L={{indicador.tempo_limite}})</strong></label>
         <input type="text" class="form-control form-control-sm text-center bold-input" value="" disabled>
       </div>
       <div class="form-group text-center mx-2 my-2">
@@ -43,9 +43,14 @@
               <tr>
                 <th class="col-md-3" scope="col">Cliente</th>
                 <th class="col-md-1" scope="col">Data</th>
-                <th class="col-md-1" scope="col">Início (h)</th>
-                <th class="col-md-1" scope="col">Término (h)</th>
-                <th class="col-md-1" scope="col">Tempo (h)</th>
+                {% if indicador.tipo_de_tempo_limite == 'horas' %}
+                  <th class="col-md-1" scope="col">Início (h)</th>
+                  <th class="col-md-1" scope="col">Término (h)</th>
+                  <th class="col-md-1" scope="col">Tempo (h)</th>
+                {% else %}
+                  <th class="col-md-1" scope="col">Envio</th>
+                  <th class="col-md-1" scope="col">Dias</th>
+                {% endif %}
                 <th class="col-md-1" scope="col">Status</th>
                 <th class="col-md-1" scope="col">Período</th>
                 <th class="col-md-1" scope="col">Responsável</th>
@@ -57,9 +62,14 @@
               <tr>
                 <td class="col-md-3" data-th="Cliente"></td>
                 <td class="col-md-1" data-th="Data"></td>
-                <td class="col-md-1" data-th="Início (h)"></td>
-                <td class="col-md-1" data-th="Término (h)"></td>
-                <td class="col-md-1" data-th="Tempo (h)"></td>
+                {% if indicador.tipo_de_tempo_limite == 'horas' %}
+                  <td class="col-md-1" data-th="Início (h)"></td>
+                  <td class="col-md-1" data-th="Término (h)"></td>
+                  <td class="col-md-1" data-th="Tempo (h)"></td>
+                {% else %}
+                  <td class="col-md-1" data-th="Envio"></td>
+                  <td class="col-md-1" data-th="Dias"></td>
+                {% endif %}
                 <td class="col-md-1" data-th="Status"></td>
                 <td class="col-md-1" data-th="Período"></td>
                 <td class="col-md-1" data-th="Responsável"></td>
