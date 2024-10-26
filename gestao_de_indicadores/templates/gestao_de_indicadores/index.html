@@ -1,17 +1,21 @@
 {% extends 'gestao_de_indicadores/base.html' %}
 
 {% block content %}
-<div class="row mt-5">
-  <div class="col-md-3">
+<div class="row mt-4">
+  <div class="col-md-2">
     <div class="card">
       <div class="card-body">
         <div class="d-grid gap-2">
           {% for indicador in indicadores %}
-            <button class="btn btn-secondary btn-small btn-custom">{{ indicador.nome }}</button>
+            <button class="btn btn-secondary btn-small btn-custom" data-indicador-id="{{ indicador.id }}">{{ indicador.nome }}</button>
           {% endfor %}
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="indicador-container" class="col-md-10">
+    {% include 'gestao_de_indicadores/indicador.html' with indicador=indicador_auditoria %}
   </div>
 </div>
 {% endblock %}
