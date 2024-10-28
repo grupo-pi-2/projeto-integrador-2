@@ -46,6 +46,6 @@ def salva_servico(request):
 def exclui_servico(request, servico_id):
   servico = Servico.objects.get(id=servico_id)
   
-  if request.method == 'POST':
+  if request.method == 'DELETE':
     servico.delete()
     return JsonResponse({'success': True, 'indicador': servico.indicador_id})

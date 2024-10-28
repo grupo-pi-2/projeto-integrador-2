@@ -126,7 +126,7 @@ function apagarServico(servicoId) {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     fetch(`exclui_servico/${servicoId}/`, {
-      method: 'POST',
+      method: 'DELETE',
       headers: { 'X-CSRFToken': csrfToken }
     })
     .then(response => response.json())
