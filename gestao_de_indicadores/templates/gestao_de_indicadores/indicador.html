@@ -32,8 +32,10 @@
       </div>
       <div class="form-group text-center mx-1 my-2">
         <label></label>
-        <i class="fa-solid fa-file-circle-plus icon-cadastrar"></i>
+        <i class="fa-solid fa-file-circle-plus icon-cadastrar" data-bs-toggle="modal" data-bs-target="#modalServico" onclick='carregarDadosModalDeServico("{{ indicador.id }}", "{{ indicador.setor_id }}")'></i>
       </div>
+
+      {% include 'gestao_de_indicadores/modal_servico.html' %}
     </div>
     
     <div class="d-flex flex-column mx-2 my-2 mt-4">
@@ -61,7 +63,7 @@
             <tbody>
               {% for servico in servicos %}
                 <tr>
-                  <td class="col-md-3" data-th="Cliente">{{ servico.cliente.razao_social }}</td>
+                  <td class="col-md-3" data-th="Cliente">{{ servico.cliente.cnpj }} - {{ servico.cliente.razao_social }}</td>
                   {% if indicador.tipo_de_tempo_limite == 'horas' %}
                     <td class="col-md-1" data-th="Data/Hora Início (h)">{{ servico.data_hora_inicio|date:"d/m/Y" }} - {{ servico.data_hora_inicio|time:"H:i" }}</td>
                     <td class="col-md-1" data-th="Data/Hora Término (h)">{{ servico.data_hora_fim|date:"d/m/Y" }} - {{ servico.data_hora_fim|time:"H:i" }}</td>
