@@ -8,11 +8,13 @@ from .models import Indicador
 def index(request):
   indicadores = Indicador.objects.all().order_by("created_at")
   indicador_auditoria = Indicador.objects.get(nome="Auditorias")
+  servicos = indicador_auditoria.servicos.all()
   template = loader.get_template("gestao_de_indicadores/index.html")
-  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria }
+  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos }
   return HttpResponse(template.render(context, request))
 
 def busca_indicador(request, indicador_id):
   indicador = Indicador.objects.get(id=indicador_id)
-  html = render(request, 'gestao_de_indicadores/indicador.html', {'indicador': indicador})
+  servicos = indicador.servicos.all()
+  html = render(request, 'gestao_de_indicadores/indicador.html', {'indicador': indicador, 'servicos': servicos})
   return HttpResponse(html.content, content_type='text/html')

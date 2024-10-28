@@ -42,12 +42,12 @@
             <thead>
               <tr>
                 <th class="col-md-3" scope="col">Cliente</th>
-                <th class="col-md-1" scope="col">Data</th>
                 {% if indicador.tipo_de_tempo_limite == 'horas' %}
-                  <th class="col-md-1" scope="col">Início (h)</th>
-                  <th class="col-md-1" scope="col">Término (h)</th>
+                  <th class="col-md-1" scope="col">Data/Hora Início (h)</th>
+                  <th class="col-md-1" scope="col">Data/Hora Término (h)</th>
                   <th class="col-md-1" scope="col">Tempo (h)</th>
                 {% else %}
+                  <th class="col-md-1" scope="col">Data</th>
                   <th class="col-md-1" scope="col">Envio</th>
                   <th class="col-md-1" scope="col">Dias</th>
                 {% endif %}
@@ -59,23 +59,25 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="col-md-3" data-th="Cliente"></td>
-                <td class="col-md-1" data-th="Data"></td>
-                {% if indicador.tipo_de_tempo_limite == 'horas' %}
-                  <td class="col-md-1" data-th="Início (h)"></td>
-                  <td class="col-md-1" data-th="Término (h)"></td>
-                  <td class="col-md-1" data-th="Tempo (h)"></td>
-                {% else %}
-                  <td class="col-md-1" data-th="Envio"></td>
-                  <td class="col-md-1" data-th="Dias"></td>
-                {% endif %}
-                <td class="col-md-1" data-th="Status"></td>
-                <td class="col-md-1" data-th="Período"></td>
-                <td class="col-md-1" data-th="Responsável"></td>
-                <td class="col-md-1 text-center"><i class="fa-solid fa-pen-to-square icon-servico"></i></td>
-                <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico"></i></td>
-              </tr>
+              {% for servico in servicos %}
+                <tr>
+                  <td class="col-md-3" data-th="Cliente">{{ servico.cliente.razao_social }}</td>
+                  {% if indicador.tipo_de_tempo_limite == 'horas' %}
+                    <td class="col-md-1" data-th="Data/Hora Início (h)">{{ servico.data_hora_inicio|date:"d/m/Y" }} - {{ servico.data_hora_inicio|time:"H:i" }}</td>
+                    <td class="col-md-1" data-th="Data/Hora Término (h)">{{ servico.data_hora_fim|date:"d/m/Y" }} - {{ servico.data_hora_fim|time:"H:i" }}</td>
+                    <td class="col-md-1" data-th="Tempo (h)">{{ servico.tempo_total }}</td>
+                  {% else %}
+                    <td class="col-md-1" data-th="Data">{{ servico.data_hora_inicio|date:"d/m/Y" }}</td>
+                    <td class="col-md-1" data-th="Envio">{{ servico.data_hora_fim|date:"d/m/Y" }}</td>
+                    <td class="col-md-1" data-th="Dias">{{ servico.dias_total }}</td>
+                  {% endif %}
+                  <td class="col-md-1" data-th="Status">{{ servico.get_status_display }}</td>
+                  <td class="col-md-1" data-th="Período">{{ servico.periodo }}</td>
+                  <td class="col-md-1" data-th="Responsável"></td>
+                  <td class="col-md-1 text-center"><i class="fa-solid fa-pen-to-square icon-servico"></i></td>
+                  <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico"></i></td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
       </div>

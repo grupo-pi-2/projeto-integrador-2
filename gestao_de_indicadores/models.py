@@ -40,7 +40,7 @@ class Servico(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     data_hora_inicio = models.DateTimeField()
     data_hora_fim = models.DateTimeField()
-    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
+    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE, related_name='servicos')
     setor = models.ForeignKey(Setor, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=3,
@@ -53,3 +53,16 @@ class Servico(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
+    
+    def tempo_total(self):
+        total = self.data_hora_fim - self.data_hora_inicio
+        total_segundos = total.total_seconds()
+        horas = int(total_segundos // 3600)
+        minutos = int((total_segundos % 3600) // 60)
+        return f"{horas:02}:{minutos:02}"
+
+
+    def dias_total(self):
+        total = self.data_hora_fim - self.data_hora_inicio
+        return f"{total.days}"
+    
