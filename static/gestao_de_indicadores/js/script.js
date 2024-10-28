@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function carregarDadosModalDeServico(indicadorId, setorId) {
+function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
   fetch('/lista_clientes/')
-    .then(response => response.json())
-    .then(clientes => {
-      const selectCliente = document.getElementById('cliente-servico');
+  .then(response => response.json())
+  .then(clientes => {
+    const selectCliente = document.getElementById('cliente-servico');
       selectCliente.innerHTML = '<option selected value="">Selecione o cliente</option>';
       clientes.forEach(cliente => {
         const option = document.createElement('option');
@@ -62,6 +62,23 @@ function carregarDadosModalDeServico(indicadorId, setorId) {
 
     document.getElementById('indicador-servico').value = indicadorId;
     document.getElementById('setor-servico').value = setorId;
+    
+    if (servicoId) {
+      fetch(`/busca_servico/${servicoId}`)
+      .then(response => response.json())
+      .then(servico => {
+        const dataHoraInicio = servico.data_hora_inicio.replace('Z', '');
+        const dataHoraFim = servico.data_hora_fim.replace('Z', '');
+
+        document.getElementById('servico-id').value = servico.id;
+        document.getElementById('cliente-servico').value = servico.cliente_id;
+        document.getElementById('data-hora-inicio-servico').value = dataHoraInicio.slice(0, 16);
+        document.getElementById('data-hora-fim-servico').value = dataHoraFim.slice(0, 16);
+        document.getElementById('status-servico').value = servico.status;
+        document.getElementById('periodo-servico').value = servico.periodo;
+      })
+      .catch(error => console.error('Erro ao buscar serviço:', error));
+    }
 }
  
 function gerarPeriodos() {
@@ -90,8 +107,11 @@ function gerarPeriodos() {
 function salvarServico() {
   const form = document.getElementById('servicoForm');
   const formData = new FormData(form);
+  const servicoId = formData.get('servico_id');
 
-  fetch(form.action, {
+  const url = servicoId ? `/atualiza_servico/${servicoId}/` : '/cria_servico/';
+
+  fetch(url, {
     method: 'POST',
     body: formData,
     headers: {

@@ -30,7 +30,7 @@ def lista_status_servico(request):
   status_mapeados = [{"id": status[0], "descricao": status[1]} for status in statuses]
   return JsonResponse(status_mapeados, safe=False, content_type='application/json')
 
-def salva_servico(request):
+def cria_servico(request):
   if request.method == 'POST':
     form = ServicoForm(request.POST)
 
@@ -49,3 +49,29 @@ def exclui_servico(request, servico_id):
   if request.method == 'DELETE':
     servico.delete()
     return JsonResponse({'success': True, 'indicador': servico.indicador_id})
+  
+def busca_servico(request, servico_id):
+  servico = Servico.objects.get(id=servico_id)
+  servico_mapeado = {
+    "id": servico.id,
+    "cliente_id": servico.cliente_id,
+    "data_hora_inicio": servico.data_hora_inicio,
+    "data_hora_fim": servico.data_hora_fim,
+    "status": servico.status,
+    "periodo": servico.periodo
+  }
+  return JsonResponse(servico_mapeado, safe=False, content_type='application/json')
+
+def atualiza_servico(request, servico_id):
+  if request.method == 'POST':
+    servico = Servico.objects.get(id=servico_id)
+    form = ServicoForm(request.POST, instance=servico)
+    
+    if form.is_valid():
+      form.save()
+      return JsonResponse({'success': True, 'indicador': request.POST['indicador']})
+    else:
+      errors = {form.fields[field_name].label: messages for field_name, messages in form.errors.items()}
+      return JsonResponse({'success': False, 'errors': errors })
+  else :
+    redirect('index')
