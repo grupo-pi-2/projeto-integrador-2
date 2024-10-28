@@ -40,7 +40,7 @@ class Servico(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     data_hora_inicio = models.DateTimeField()
     data_hora_fim = models.DateTimeField()
-    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
+    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE, related_name='servicos')
     setor = models.ForeignKey(Setor, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=3,
