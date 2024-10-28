@@ -1,5 +1,5 @@
 
-<form id="servicoForm" action="{% url 'salva_servico' %}" method="post" onsubmit="salvarServico(); return false;">
+<form id="servicoForm" action="{% url 'cria_servico' %}" method="post" onsubmit="salvarServico(); return false;">
   {% csrf_token %}
   <div class="modal fade" id="modalServico" tabindex="-1" aria-labelledby="modalServicoLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -15,6 +15,7 @@
 
           <input type="hidden" id="indicador-servico" name="indicador">
           <input type="hidden" id="setor-servico" name="setor">
+          <input type="hidden" id="servico-id" name="servico_id">
 
           <div class="mb-3">
             <label for="cliente" class="form-label">Cliente</label>

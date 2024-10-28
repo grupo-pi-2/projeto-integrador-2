@@ -65,6 +65,7 @@ body {
 .icon-servico {
   font-size: 16px;
   color: #6c757d;
+  cursor: pointer;
 }
 
 .text-center {
