@@ -120,3 +120,24 @@ function salvarServico() {
   })
   .catch(error => console.error('Erro ao cadastrar serviço:', error));
 }
+
+function apagarServico(servicoId) {
+  if (confirm('Você tem certeza que deseja apagar este serviço?')) {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(`exclui_servico/${servicoId}/`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrfToken }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const botaoIndicador = document.querySelector(`.btn-menu-indicador[data-indicador-id="${data.indicador}"]`);
+        if (botaoIndicador) { botaoIndicador.click(); }
+      } else {
+        alert("Ocorreu um erro ao apagar o serviço");
+      }
+    })
+    .catch(error => console.error('Erro ao apagar serviço:', error));
+  }
+}
