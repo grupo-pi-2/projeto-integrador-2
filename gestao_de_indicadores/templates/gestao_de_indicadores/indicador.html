@@ -77,7 +77,7 @@
                   <td class="col-md-1" data-th="Período">{{ servico.periodo }}</td>
                   <td class="col-md-1" data-th="Responsável"></td>
                   <td class="col-md-1 text-center"><i class="fa-solid fa-pen-to-square icon-servico"></i></td>
-                  <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico"></i></td>
+                  <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico" onclick='apagarServico("{{ servico.id }}")'></i></td>
                 </tr>
               {% endfor %}
             </tbody>
