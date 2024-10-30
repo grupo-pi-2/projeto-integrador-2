@@ -6,8 +6,13 @@ body {
   font-size: 12px;
 }
 
+/*navbar */
 .nav-bar-style {
   padding-left: 12px;
+}
+
+.nav-title {
+  color: #212529;
 }
 
 /* painel de métricas */
@@ -72,7 +77,7 @@ body {
   text-align: center;
 }
 
-/* modal serviço */
-.form-select, .form-date-hour {
+/* forms em geral */
+.form-control {
   font-size: 12px;
 }

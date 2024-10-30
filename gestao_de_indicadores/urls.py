@@ -10,4 +10,9 @@ urlpatterns = [
     path('atualiza_servico/<int:servico_id>/', views.atualiza_servico, name='atualiza_servico'),
     path('exclui_servico/<int:servico_id>/', views.exclui_servico, name='exclui_servico'),
     path('busca_servico/<int:servico_id>/', views.busca_servico, name='busca_servico'),
+    path('clientes/', views.clientes, name='clientes'),
+    path('cria_cliente/', views.cria_cliente, name='cria_cliente'),
+    path('atualiza_cliente/<int:cliente_id>/', views.atualiza_cliente, name='atualiza_cliente'),
+    path('exclui_cliente/<int:cliente_id>/', views.exclui_cliente, name='exclui_cliente'),
+    path('busca_cliente/<int:cliente_id>/', views.busca_cliente, name='busca_cliente'),
 ]

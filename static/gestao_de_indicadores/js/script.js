@@ -161,3 +161,89 @@ function apagarServico(servicoId) {
     .catch(error => console.error('Erro ao apagar serviço:', error));
   }
 }
+
+function salvarCliente() {
+  const form = document.getElementById('clienteForm');
+  const formData = new FormData(form);
+  const clienteId = formData.get('cliente_id');
+
+  const url = clienteId ? `/atualiza_cliente/${clienteId}/` : '/cria_cliente/';
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        const erros_cliente = document.getElementById('erros-cliente');
+        erros_cliente.innerHTML = '<ul></ul>';
+        erros_cliente.style.display = 'block';
+
+        for (const [field, messages] of Object.entries(data.errors)) {
+          const erro = document.createElement('li');
+          erro.textContent = `${field}: ${messages.join(", ")}`;
+          erros_cliente.querySelector('ul').appendChild(erro);
+        }
+      }
+  })
+  .catch(error => console.error('Erro ao cadastrar cliente:', error));
+}
+
+function carregarDadosFormDeCliente(clienteId) {
+  if (clienteId) {
+    fetch(`/busca_cliente/${clienteId}`)
+    .then(response => response.json())
+    .then(cliente => {
+      document.getElementById('cliente-id').value = cliente.id;
+      document.getElementById('cnpj-cliente').value = cliente.cnpj;
+      document.getElementById('razao-social-cliente').value = cliente.razao_social;
+    })
+    .catch(error => console.error('Erro ao buscar cliente:', error));
+  }
+}
+
+function apagarCliente(clienteId) {
+  if (confirm('Você tem certeza que deseja apagar este cliente?')) {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(`/exclui_cliente/${clienteId}/`, {
+      method: 'DELETE',
+      headers: { 'X-CSRFToken': csrfToken }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("Ocorreu um erro ao apagar o cliente");
+      }
+    })
+    .catch(error => console.error('Erro ao apagar cliente:', error));
+  }
+}
+
+function pesquisarCnpj(cnpj) {
+  if (cnpj) {
+    url = `https://api.cnpjs.dev/v1/${cnpj}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.cnpj === cnpj) {
+          document.getElementById('razao-social-cliente').value = data.razao_social;
+        } else {
+          document.getElementById('razao-social-cliente').value = "";
+          alert(data.title);
+        }
+      })
+      .catch(error => console.error('Erro ao buscar CNPJ:', error));
+  } else {
+    alert("Por favor, insira um CNPJ para pesquisar.");
+  }
+}
