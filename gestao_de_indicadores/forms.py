@@ -1,5 +1,5 @@
 from django import forms
-from .models import Servico
+from .models import Servico, Cliente
 
 class ServicoForm(forms.ModelForm):
     class Meta:
@@ -17,4 +17,13 @@ class ServicoForm(forms.ModelForm):
         'setor': 'Setor',
         'status': 'Status',
         'periodo': 'Período',
+      }
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+      model = Cliente
+      fields = ['cnpj', 'razao_social']
+      labels = {
+        'cnpj': 'CNPJ',
+        'razao_social': 'Razão Social',
       }

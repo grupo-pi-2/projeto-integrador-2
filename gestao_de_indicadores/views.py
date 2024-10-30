@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from .forms import ServicoForm
+from .forms import ServicoForm, ClienteForm
 from django.shortcuts import render, redirect
 from django.template import loader
 
@@ -75,3 +75,54 @@ def atualiza_servico(request, servico_id):
       return JsonResponse({'success': False, 'errors': errors })
   else :
     redirect('index')
+
+def clientes(request):
+  clientes = Cliente.objects.all()
+  template = loader.get_template("gestao_de_indicadores/clientes.html")
+  context = { "clientes": clientes }
+  return HttpResponse(template.render(context, request))
+
+def cria_cliente(request):
+  if request.method == 'POST':
+    form = ClienteForm(request.POST)
+
+    if form.is_valid():
+      form.save()
+      return JsonResponse({'success': True})
+    else:
+      errors = {form.fields[field_name].label: messages for field_name, messages in form.errors.items()}
+      return JsonResponse({'success': False, 'errors': errors })
+  else :
+    redirect('clientes')
+
+def busca_cliente(request, cliente_id):
+  cliente = Cliente.objects.get(id=cliente_id)
+  cliente_mapeado = {
+    "id": cliente.id,
+    "cnpj": cliente.cnpj,
+    "razao_social": cliente.razao_social,
+  }
+  return JsonResponse(cliente_mapeado, safe=False, content_type='application/json')
+
+def atualiza_cliente(request, cliente_id):
+  if request.method == 'POST':
+    cliente = Cliente.objects.get(id=cliente_id)
+    form = ClienteForm(request.POST, instance=cliente)
+    
+    if form.is_valid():
+      form.save()
+      return JsonResponse({'success': True})
+    else:
+      errors = {form.fields[field_name].label: messages for field_name, messages in form.errors.items()}
+      return JsonResponse({'success': False, 'errors': errors })
+  else :
+    redirect('clientes')
+
+def exclui_cliente(request, cliente_id):
+  cliente = Cliente.objects.get(id=cliente_id)
+  
+  if request.method == 'DELETE':
+    cliente.delete()
+    return JsonResponse({'success': True})
+  
+
