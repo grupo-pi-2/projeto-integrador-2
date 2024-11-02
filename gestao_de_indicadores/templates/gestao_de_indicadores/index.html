@@ -7,8 +7,14 @@
       <div class="card-body">
         <div class="d-grid gap-2">
           {% for indicador in indicadores %}
-            <button class="btn btn-secondary btn-small btn-menu-indicador" data-indicador-id="{{ indicador.id }}">{{ indicador.nome }}</button>
+            <button class="btn btn-secondary btn-small btn-menu-indicador {% if indicador.is_auditorias %}active{% endif %}" data-indicador-id="{{ indicador.id }}">{{ indicador.nome }}</button>
           {% endfor %}
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+          <label for="periodo-select" class="text-center"><strong>Período</strong></label>
+          <select id="periodo-select" class="form-select form-control">
+          </select>
         </div>
       </div>
     </div>

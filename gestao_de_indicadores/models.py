@@ -21,6 +21,9 @@ class Indicador(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
+
+    def is_auditorias(self):
+        return self.nome == "Auditorias"
     
 class Cliente(models.Model):
     razao_social = models.CharField(max_length=150, blank=False)

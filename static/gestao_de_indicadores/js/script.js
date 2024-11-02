@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
   const buttons = document.querySelectorAll('.btn-menu-indicador');
   const indicadorContainer = document.getElementById('indicador-container');
+  const selectPeriodo = document.getElementById('periodo-select');
 
   buttons.forEach(button => {
     button.addEventListener('click', function() {
-      const indicadorId = this.getAttribute('data-indicador-id');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
 
-      fetch(`/busca_indicador/${indicadorId}`)
+      const indicadorId = this.getAttribute('data-indicador-id');
+      const periodoSelecionado = selectPeriodo.value || mesAnoAtual();
+
+      fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}`)
         .then(response => response.text())
         .then(data => {
           indicadorContainer.innerHTML = data;
@@ -14,7 +19,30 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     });
   });
+
+  preencherSelectPeriodos();
+  
+  selectPeriodo.addEventListener('change', function() {
+    const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
+    if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
+  });
 });
+
+function preencherSelectPeriodos() {
+  const periodos = gerarPeriodos();
+  const select = document.getElementById('periodo-select');
+  const mesAno = mesAnoAtual();
+
+  periodos.forEach(periodo => {
+    const option = document.createElement('option');
+    option.value = periodo;
+    option.textContent = periodo;
+    if (periodo === mesAno) {
+      option.selected = true;
+    }
+    select.appendChild(option);
+  });
+}
 
 function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
   fetch('/lista_clientes/')
@@ -246,4 +274,11 @@ function pesquisarCnpj(cnpj) {
   } else {
     alert("Por favor, insira um CNPJ para pesquisar.");
   }
+}
+
+function mesAnoAtual() {
+  const dataAtual = new Date();
+  const mesAtual = String(dataAtual.getMonth() + 1).padStart(2, '0');
+  const anoAtual = dataAtual.getFullYear();
+  return `${mesAtual}/${anoAtual}`;
 }
