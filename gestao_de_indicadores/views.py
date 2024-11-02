@@ -2,21 +2,30 @@ from django.http import HttpResponse, JsonResponse
 from .forms import ServicoForm, ClienteForm
 from django.shortcuts import render, redirect
 from django.template import loader
+from datetime import datetime
 
 from .models import Indicador, Cliente, Servico
 
 # Create your views here.
 def index(request):
+  data_atual = datetime.now()
+  periodo_padrao = data_atual.strftime('%m/%Y')
+  periodo = request.GET.get('periodo') or periodo_padrao
+
   indicadores = Indicador.objects.all().order_by("created_at")
   indicador_auditoria = Indicador.objects.get(nome="Auditorias")
-  servicos = indicador_auditoria.servicos.all()
+  servicos = indicador_auditoria.servicos.filter(periodo=periodo)
   template = loader.get_template("gestao_de_indicadores/index.html")
   context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos }
   return HttpResponse(template.render(context, request))
 
 def busca_indicador(request, indicador_id):
+  data_atual = datetime.now()
+  periodo_padrao = data_atual.strftime('%m/%Y')
+  periodo = request.GET.get('periodo') or periodo_padrao
+
   indicador = Indicador.objects.get(id=indicador_id)
-  servicos = indicador.servicos.all()
+  servicos = indicador.servicos.filter(periodo=periodo)
   html = render(request, 'gestao_de_indicadores/indicador.html', {'indicador': indicador, 'servicos': servicos})
   return HttpResponse(html.content, content_type='text/html')
 
