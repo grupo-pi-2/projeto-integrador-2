@@ -18,12 +18,17 @@ class Indicador(models.Model):
     setor = models.ForeignKey(Setor, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    indicador_geral = models.BooleanField(default=False)
+    indicador_pai = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='subindicadores')
 
     def __str__(self):
         return str(model_to_dict(self))
 
     def is_auditorias(self):
         return self.nome == "Auditorias"
+    
+    def is_painel_kpi(self):
+        return self.nome == "Painel KPI"
     
 class Cliente(models.Model):
     razao_social = models.CharField(max_length=150, blank=False)
@@ -57,15 +62,22 @@ class Servico(models.Model):
     def __str__(self):
         return str(model_to_dict(self))
     
-    def tempo_total(self):
+    def tempo_total_formatado(self):
         total = self.data_hora_fim - self.data_hora_inicio
         total_segundos = total.total_seconds()
         horas = int(total_segundos // 3600)
         minutos = int((total_segundos % 3600) // 60)
         return f"{horas:02}:{minutos:02}"
 
+    def tempo_total_em_segundos(self):
+        total = self.data_hora_fim - self.data_hora_inicio
+        return total.total_seconds()
 
-    def dias_total(self):
+    def dias_total_formatado(self):
         total = self.data_hora_fim - self.data_hora_inicio
         return f"{total.days}"
+    
+    def dias_total(self):
+        total = self.data_hora_fim - self.data_hora_inicio
+        return total.days
     
