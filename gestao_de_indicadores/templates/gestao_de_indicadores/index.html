@@ -7,7 +7,12 @@
       <div class="card-body">
         <div class="d-grid gap-2">
           {% for indicador in indicadores %}
-            <button class="btn btn-secondary btn-small btn-menu-indicador {% if indicador.is_auditorias %}active{% endif %}" data-indicador-id="{{ indicador.id }}">{{ indicador.nome }}</button>
+            <button
+            class="btn {% if indicador.is_painel_kpi%}btn-warning{% else %}btn-secondary{% endif %} 
+                   btn-small 
+                   btn-menu-indicador {% if indicador.is_auditorias %}active{% endif %}
+                   {% if indicador.is_painel_kpi %}painel-kpi{% endif %}"
+                   data-indicador-id="{{ indicador.id }}">{{ indicador.nome }}</button>
           {% endfor %}
         </div>
 
