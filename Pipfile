@@ -8,6 +8,7 @@ django = "*"
 psycopg = "*"
 django-bootstrap5 = "*"
 fontawesomefree = "*"
+python-decouple = "*"
 
 [dev-packages]
 
