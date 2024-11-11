@@ -9,6 +9,9 @@ psycopg = "*"
 django-bootstrap5 = "*"
 fontawesomefree = "*"
 python-decouple = "*"
+typing-extensions = "*"
+gunicorn = "*"
+whitenoise = {extras = ["brotli"], version = "*"}
 
 [dev-packages]
 
