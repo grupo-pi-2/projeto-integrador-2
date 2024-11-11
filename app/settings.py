@@ -1,3 +1,5 @@
+from decouple import config
+
 """
 Django settings for app project.
 
@@ -79,10 +81,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestao_de_indicadores',
-        'HOST': 'localhost',
-        'USER': '',
-        'PASSWORD': '',
+        'NAME': config('DATABASE_NAME'),
+        'HOST': config('DATABASE_HOST'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
     }
 }
 
