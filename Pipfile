@@ -9,6 +9,7 @@ psycopg = "*"
 django-bootstrap5 = "*"
 fontawesomefree = "*"
 python-decouple = "*"
+typing-extensions = "*"
 
 [dev-packages]
 
