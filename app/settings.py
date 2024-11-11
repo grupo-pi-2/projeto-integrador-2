@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-pg=%=1=i4*m*i4rq6(-ttq&p)wd-m!^glk9i!v8%20klp+bdy6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gestao-de-indicadores.onrender.com']
 
 
 # Application definition
