@@ -81,3 +81,10 @@ body {
 .form-control {
   font-size: 12px;
 }
+
+/* loading */
+.loading {
+  display: none;
+  text-align: center;
+  padding-top: 36px;
+}
