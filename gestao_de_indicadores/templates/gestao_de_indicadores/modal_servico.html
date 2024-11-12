@@ -1,0 +1,62 @@
+
+<form id="servicoForm" action="{% url 'cria_servico' %}" method="post" onsubmit="salvarServico(); return false;">
+  {% csrf_token %}
+  <div class="modal fade" id="modalServico" tabindex="-1" aria-labelledby="modalServicoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="modalServicoLabel">Cadastro de Serviço</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="erros-servico" class="alert alert-danger" style="display: none;">
+            <ul></ul>
+          </div>
+
+          <input type="hidden" id="indicador-servico" name="indicador">
+          <input type="hidden" id="setor-servico" name="setor">
+          <input type="hidden" id="servico-id" name="servico_id">
+
+          <div class="mb-3">
+            <label for="cliente" class="form-label">Cliente</label>
+            <select class="form-control" id="cliente-servico" name="cliente">
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="dataHoraInicio" class="form-label">Data/Hora Início</label>
+            <input type="datetime-local" class="form-control" id="data-hora-inicio-servico" name="data_hora_inicio">
+          </div>
+
+          <div class="mb-3">
+            <label for="dataHoraFim" class="form-label">Data/Hora Fim</label>
+            <input type="datetime-local" class="form-control" id="data-hora-fim-servico" name="data_hora_fim">
+          </div>
+
+          <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-control" id="status-servico" name="status">
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="periodo" class="form-label">Período</label>
+            <select class="form-control" id="periodo-servico" name="periodo">
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="responsavel" class="form-label">Responsável</label>
+            <select class="form-control" id="responsavel-servico" name="responsavel">
+              <option selected value="">Selecione o responsável</option>
+            </select>
+          </div>
+          <div class="text-end">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

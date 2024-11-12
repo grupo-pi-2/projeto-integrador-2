@@ -1,0 +1,83 @@
+body {
+  font-size: 12px;
+}
+
+.btn {
+  font-size: 12px;
+}
+
+/*navbar */
+.nav-bar-style {
+  padding-left: 12px;
+}
+
+.nav-title {
+  color: #212529;
+}
+
+/* painel de métricas */
+.bold-input {
+  font-weight: bold;
+}
+
+.icon-cadastrar {
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+/* tabela de serviços */
+.table-responsive {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .table-stacked thead {
+    display: none;
+  }
+
+  .table-stacked tbody td {
+    display: block;
+    width: 100%;
+    position: relative;
+    padding-left: 40%;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .table-stacked tbody td::before {
+    content: attr(data-th);
+    position: absolute;
+    left: 0;
+    width: 35%;
+    padding-left: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    text-align: left;
+    color: #000;
+  }
+
+  .table-stacked tbody tr {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.icon-servico {
+  font-size: 16px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* forms em geral */
+.form-control {
+  font-size: 12px;
+}

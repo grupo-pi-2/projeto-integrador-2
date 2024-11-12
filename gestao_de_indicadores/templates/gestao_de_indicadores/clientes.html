@@ -1,0 +1,57 @@
+{% extends 'gestao_de_indicadores/base.html' %}
+
+{% block content %}
+<div class="col-md-6">
+  <form class="mt-4" id="clienteForm" action="{% url 'cria_cliente' %}" method="post" onsubmit="salvarCliente(); return false;">
+    {% csrf_token %}
+    <div id="erros-cliente" class="alert alert-danger" style="display: none;">
+      <ul></ul>
+    </div>
+  
+    <input type="hidden" id="cliente-id" name="cliente_id">
+    <div class="form-group">
+      <label for="inputCnpj" class="form-label"><strong>CNPJ</strong></label>
+      <div class="input-group">
+        <input type="text" class="form-control input-cliente" id="cnpj-cliente" name="cnpj" placeholder="Informe o CNPJ" maxlength="14">
+        <a href="#" class="input-group-text" onclick="pesquisarCnpj(document.getElementById('cnpj-cliente').value)" style="text-decoration: none;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+      </div>
+      <small id="cnpj-info" class="form-text text-muted">Digite o CNPJ sem pontuação (máximo 14 caracteres)</small>
+    </div>
+    <div class="form-group mt-2">
+      <label for="razaoSocial" class="form-label"><strong>Razão Social</strong></label>
+      <input type="razao-social" class="form-control input-cliente" id="razao-social-cliente" name="razao_social" placeholder="Informe a razão social">
+    </div>
+    <div class="text-end mt-2">
+      <button type="submit" class="btn btn-success">Salvar</button>
+    </div>
+  </form>
+</div>
+
+<table class="table mt-5">
+  <thead>
+    <tr>
+      <th class="col-md-2">CNPJ</th>
+      <th class="col-md-7">Razão Social</th>
+      <th class="col-md-1"></th>
+      <th class="col-md-1"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cliente in clientes %}
+      <tr>
+        <td class="col-md-2">{{ cliente.cnpj }}</td>
+        <td class="col-md-2">{{ cliente.razao_social }}</td>
+        <td class="col-md-1 text-center">
+          <i
+          class="fa-solid fa-pen-to-square icon-servico"
+          onclick='carregarDadosFormDeCliente("{{ cliente.id }}")'></i>
+          </i>
+        </td>
+        <td class="col-md-1 text-center"><i class="fa-solid fa-trash icon-servico" onclick='apagarCliente("{{ cliente.id }}")'></i></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
