@@ -15,6 +15,8 @@ def index(request):
   indicadores = Indicador.objects.all().order_by("ordenacao")
   indicador_auditoria = Indicador.objects.get(nome="Auditorias")
   servicos = indicador_auditoria.servicos.filter(periodo=periodo)
+  
+  clientes = Cliente.objects.all()
 
   qtde_servicos_programados = servicos.count()
   qtde_servicos_concluidos = servicos.filter(status='CON').count()
@@ -46,13 +48,14 @@ def index(request):
   }
 
   template = loader.get_template("gestao_de_indicadores/index.html")
-  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas }
+  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas, "clientes": clientes }
   return HttpResponse(template.render(context, request))
 
 def busca_indicador(request, indicador_id):
   data_atual = datetime.now()
   periodo_padrao = data_atual.strftime('%m/%Y')
   periodo = request.GET.get('periodo') or periodo_padrao
+  cliente = request.GET.get('cliente_id')
 
   indicador = Indicador.objects.get(id=indicador_id)
 
@@ -71,6 +74,10 @@ def busca_indicador(request, indicador_id):
         qtde_servicos_concluidos_no_ano += qtde_servicos_concluidos
 
       servicos = subindicador.servicos.filter(periodo=periodo)
+
+      if cliente:
+        servicos = servicos.filter(cliente_id=cliente)
+
       servicos_concluidos = servicos.filter(status='CON')
       
       qtde_servicos_concluidos = servicos_concluidos.count()
@@ -102,6 +109,9 @@ def busca_indicador(request, indicador_id):
     data = {'indicador': indicador, 'subindicadores': subindicadores_servicos}
   else:
     servicos = indicador.servicos.filter(periodo=periodo)
+
+    if cliente:
+      servicos = servicos.filter(cliente_id=cliente)
 
     qtde_servicos_programados = servicos.count()
     qtde_servicos_concluidos = servicos.filter(status='CON').count()

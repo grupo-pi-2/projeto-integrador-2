@@ -21,6 +21,16 @@
           <select id="periodo-select" class="form-select form-control">
           </select>
         </div>
+
+        <div class="d-grid gap-2 mt-4">
+          <label for="cliente-select" class="text-center"><strong>Cliente</strong></label>
+          <select id="cliente-select" class="form-select form-control">
+            <option></option>
+            {% for cliente in clientes %}
+              <option value="{{ cliente.id }}">{{ cliente.razao_social }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
     </div>
   </div>

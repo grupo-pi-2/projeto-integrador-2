@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const buttons = document.querySelectorAll('.btn-menu-indicador');
   const indicadorContainer = document.getElementById('indicador-container');
   const selectPeriodo = document.getElementById('periodo-select');
+  const selectCliente = document.getElementById('cliente-select');
 
   buttons.forEach(button => {
     button.addEventListener('click', function() {
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const indicadorId = this.getAttribute('data-indicador-id');
       const periodoSelecionado = selectPeriodo.value || mesAnoAtual();
 
-      fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}`)
+      fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}&cliente_id=${selectCliente.value}`)
         .then(response => response.text())
         .then(data => {
           indicadorContainer.innerHTML = data;
@@ -23,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
   preencherSelectPeriodos();
   
   selectPeriodo.addEventListener('change', function() {
+    const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
+    if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
+  });
+
+  selectCliente.addEventListener('change', function() {
     const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
     if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
   });
