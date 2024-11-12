@@ -12,7 +12,7 @@ def index(request):
   periodo_padrao = data_atual.strftime('%m/%Y')
   periodo = request.GET.get('periodo') or periodo_padrao
 
-  indicadores = Indicador.objects.all().order_by("created_at")
+  indicadores = Indicador.objects.all().order_by("ordenacao")
   indicador_auditoria = Indicador.objects.get(nome="Auditorias")
   servicos = indicador_auditoria.servicos.filter(periodo=periodo)
 
@@ -62,7 +62,7 @@ def busca_indicador(request, indicador_id):
     for mes in range(mes_atual, 0, -1):
       periodos_do_ano.append(f'{mes:02d}/{ano_atual}')
 
-    subindicadores = indicador.subindicadores.all().order_by("created_at")
+    subindicadores = indicador.subindicadores.all().order_by("ordenacao")
     subindicadores_servicos = []
     for subindicador in subindicadores:
       qtde_servicos_concluidos_no_ano = 0
