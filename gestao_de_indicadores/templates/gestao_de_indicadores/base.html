@@ -1,35 +1,39 @@
 {% load django_bootstrap5 static %}
 
 <!DOCTYPE html>
-  <html lang="en">
-  <head>
+<html lang="pt-br">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="geo.region" content="BR">
     {% bootstrap_css %}
     <title>Gestão de Indicadores</title>
     <link href="{% static 'gestao_de_indicadores/css/styles.css' %}" rel="stylesheet">
     <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css'   
+ %}" rel="stylesheet" type="text/css">
     <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
-  </head>
-  <body>
+</head>   
+
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand col-md-2" href="/">
-        <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
-      </a>
-      <div class="collapse navbar-collapse col-md-10" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link nav-title" href="/clientes">Clientes</span></a>
-          </li>
-        </ul>
-      </div> 
+        <a class="navbar-brand   
+ col-md-2" href="/">
+            <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
+        </a>
+        <div class="collapse navbar-collapse col-md-10" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link nav-title" href="/clientes">Clientes</a>
+                </li>
+            </ul>
+        </div> 
     </nav>
     <div class="container-fluid">
-      {% block content %}
-      {% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
     {% bootstrap_javascript %}
     <script src="{% static 'gestao_de_indicadores/js/script.js' %}"></script>
-  </body>
+</body>
 </html>
