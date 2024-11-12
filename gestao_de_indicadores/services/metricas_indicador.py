@@ -5,7 +5,8 @@ class MetricasIndicador:
     self.periodo = periodo
 
   def gerar(self):
-    return { 
+    return {
+      'indicador': self.indicador,
       'qtde_servicos_programados': self._qtde_servicos_programados(),
       'qtde_servicos_concluidos': self._qtde_servicos_concluidos(),
       'percentual_servicos_concluidos': self._percentual_servicos_concluidos(),

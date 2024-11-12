@@ -15,10 +15,10 @@
               </div>
               <div class="card-body">
                 <label><strong>Concluídos:</strong></label><br>
-                <label><strong> {{ subindicador.qtde_servicos_concluidos }} de {{ subindicador.qtde_servicos_total }} ({{ subindicador.percentual_servicos_concluidos }}%)</strong></label>
+                <label><strong> {{ subindicador.qtde_servicos_concluidos }} de {{ subindicador.qtde_servicos_programados }} ({{ subindicador.percentual_servicos_concluidos }}%)</strong></label>
                 <hr>
                 <label><strong>Performance:</strong></label><br>
-                <label><strong>{% if subindicador.indicador.tipo_de_tempo_limite == 'horas' %}{{ subindicador.media_tempo_em_horas_servicos }}{% else %}{{ subindicador.media_dias_servicos }}{% endif %} de {{ subindicador.indicador.tempo_limite }} ({% if subindicador.indicador.tipo_de_tempo_limite == 'horas' %}{{ subindicador.percentual_tempo_em_horas_servicos }}{% else %}{{ subindicador.percentual_dias_servicos }}{% endif %}%)</strong></label>
+                <label><strong>{{ subindicador.tempo_medio_servicos_concluidos }} de {{ subindicador.indicador.tempo_limite }} ({{ subindicador.percentual_tempo_servicos_concluidos }}%)</strong></label>
                 <hr>
                 <label><strong>YTD: {{ subindicador.qtde_servicos_concluidos_no_ano }}</strong></label>
               </div>

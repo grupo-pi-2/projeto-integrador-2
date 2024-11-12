@@ -35,49 +35,19 @@ def busca_indicador(request, indicador_id):
   indicador = Indicador.objects.get(id=indicador_id)
 
   if indicador.indicador_geral:
-
-
     subindicadores = indicador.subindicadores.all().order_by("ordenacao")
-    subindicadores_servicos = []
-    for subindicador in subindicadores:
-      qtde_servicos_concluidos_no_ano = 0
-      for periodo_acumulado in periodos_do_ano:
-        qtde_servicos_concluidos = subindicador.servicos.filter(periodo=periodo_acumulado, status='CON').count()
-        qtde_servicos_concluidos_no_ano += qtde_servicos_concluidos
 
+    subindicadores_servicos = []
+
+    for subindicador in subindicadores:
       servicos = subindicador.servicos.filter(periodo=periodo)
 
       if cliente:
         servicos = servicos.filter(cliente_id=cliente)
 
-      servicos_concluidos = servicos.filter(status='CON')
-      
-      qtde_servicos_concluidos = servicos_concluidos.count()
-      qtde_servicos_total = servicos.count()
-      percentual_servicos_concluidos = round(qtde_servicos_concluidos / qtde_servicos_total, 2) * 100 if qtde_servicos_total > 0 else 0
-      
-      tempo_total_servicos = sum(servico.tempo_total_em_segundos() for servico in servicos_concluidos)
-      media_tempo_servicos = tempo_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and tempo_total_servicos > 0 else 0
-      media_tempo_em_horas_servicos = (media_tempo_servicos / 3600) if media_tempo_servicos > 0 else 0
-      media_tempo_em_minutos_servicos = int(media_tempo_servicos % 3600 // 60) if media_tempo_servicos > 0 else 0
-      media_tempo_em_horas_e_minutos_servicos = f"{int(media_tempo_em_horas_servicos):02}:{media_tempo_em_minutos_servicos:02}"
-      percentual_tempo_em_horas_servicos = round(media_tempo_em_horas_servicos / subindicador.tempo_limite, 2) * 100 if subindicador.tempo_limite > 0 else 0
+      metricas = MetricasIndicador(subindicador, servicos, periodo).gerar()
+      subindicadores_servicos.append(metricas)
 
-      dias_total_servicos = sum(servico.dias_total() for servico in servicos_concluidos)
-      media_dias_servicos = dias_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and dias_total_servicos > 0 else 0
-      percentual_dias_servicos = round((media_dias_servicos * 100) / subindicador.tempo_limite, 2) if subindicador.tempo_limite and media_dias_servicos > 0 else 0
-
-      subindicadores_servicos.append({
-        'indicador': subindicador,
-        'qtde_servicos_concluidos': qtde_servicos_concluidos,
-        'qtde_servicos_total': qtde_servicos_total,
-        'percentual_servicos_concluidos': percentual_servicos_concluidos,
-        'media_tempo_em_horas_servicos': media_tempo_em_horas_e_minutos_servicos,
-        'media_dias_servicos': int(media_dias_servicos),
-        'percentual_tempo_em_horas_servicos': percentual_tempo_em_horas_servicos,
-        'percentual_dias_servicos': percentual_dias_servicos,
-        'qtde_servicos_concluidos_no_ano': qtde_servicos_concluidos_no_ano
-      })
     data = {'indicador': indicador, 'subindicadores': subindicadores_servicos}
   else:
     servicos = indicador.servicos.filter(periodo=periodo)
