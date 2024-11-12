@@ -15,10 +15,10 @@
               </div>
               <div class="card-body">
                 <label><strong>Concluídos:</strong></label><br>
-                <label><strong> {{ subindicador.qtde_servicos_concluidos }} de {{ subindicador.qtde_servicos_total }} ({{ subindicador.percentual_servicos_concluidos }}%)</strong></label>
+                <label><strong> {{ subindicador.qtde_servicos_concluidos }} de {{ subindicador.qtde_servicos_programados }} ({{ subindicador.percentual_servicos_concluidos }}%)</strong></label>
                 <hr>
                 <label><strong>Performance:</strong></label><br>
-                <label><strong>{% if subindicador.indicador.tipo_de_tempo_limite == 'horas' %}{{ subindicador.media_tempo_em_horas_servicos }}{% else %}{{ subindicador.media_dias_servicos }}{% endif %} de {{ subindicador.indicador.tempo_limite }} ({% if subindicador.indicador.tipo_de_tempo_limite == 'horas' %}{{ subindicador.percentual_tempo_em_horas_servicos }}{% else %}{{ subindicador.percentual_dias_servicos }}{% endif %}%)</strong></label>
+                <label><strong>{{ subindicador.tempo_medio_servicos_concluidos }} de {{ subindicador.indicador.tempo_limite }} ({{ subindicador.percentual_tempo_servicos_concluidos }}%)</strong></label>
                 <hr>
                 <label><strong>YTD: {{ subindicador.qtde_servicos_concluidos_no_ano }}</strong></label>
               </div>
@@ -28,23 +28,23 @@
       {% else %}
         <div class="form-group text-center mx-2 my-2">
           <label><strong>Programados</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.programados }}" disabled>
+          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.qtde_servicos_programados }}" disabled>
         </div>
         <div class="form-group text-center mx-2 my-2">
           <label><strong>Concluídos</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.concluidos }}" disabled>
+          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.qtde_servicos_concluidos }}" disabled>
         </div>
         <div class="form-group text-center mx-1 my-2">
           <label><strong>%</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.percentual_concluidos }}%" disabled>
+          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.percentual_servicos_concluidos }}%" disabled>
         </div>
         <div class="form-group text-center mx-2 my-2">
           <label><strong>Média ({{indicador.tipo_de_tempo_limite}})</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="{% if indicador.tipo_de_tempo_limite == 'horas' %}{{ metricas.media_em_horas }}{% else %}{{ metricas.media_em_dias }}{% endif %}" disabled>
+          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.tempo_medio_servicos_concluidos }}" disabled>
         </div>
         <div class="form-group text-center mx-2 my-2">
           <label><strong>Performance (L={{indicador.tempo_limite}})</strong></label>
-          <input type="text" class="form-control form-control-sm text-center bold-input" value="{% if indicador.tipo_de_tempo_limite == 'horas' %}{{ metricas.percentual_horas_concluidos }}{% else %}{{ metricas.percentual_dias_concluidos }}{% endif %}%" disabled>
+          <input type="text" class="form-control form-control-sm text-center bold-input" value="{{ metricas.percentual_tempo_servicos_concluidos }}%" disabled>
         </div>
         <div class="form-group text-center mx-2 my-2">
           <label><strong>YTD</strong></label>

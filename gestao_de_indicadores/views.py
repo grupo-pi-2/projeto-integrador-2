@@ -6,6 +6,8 @@ from datetime import datetime
 
 from .models import Indicador, Cliente, Servico
 
+from gestao_de_indicadores.services.metricas_indicador import MetricasIndicador
+
 # Create your views here.
 def index(request):
   data_atual = datetime.now()
@@ -18,34 +20,7 @@ def index(request):
   
   clientes = Cliente.objects.all()
 
-  qtde_servicos_programados = servicos.count()
-  qtde_servicos_concluidos = servicos.filter(status='CON').count()
-  media_em_percentual = round(qtde_servicos_concluidos / qtde_servicos_programados, 2) * 100 if qtde_servicos_programados > 0 else 0
-  tempo_total_servicos = sum(servico.tempo_total_em_segundos() for servico in servicos)
-  media_tempo_servicos = tempo_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and tempo_total_servicos > 0 else 0
-  media_tempo_em_horas_servicos = (media_tempo_servicos / 3600) if media_tempo_servicos > 0 else 0
-  media_tempo_em_minutos_servicos = int(media_tempo_servicos % 3600 // 60) if media_tempo_servicos > 0 else 0
-  media_tempo_em_horas_e_minutos_servicos = f"{int(media_tempo_em_horas_servicos):02}:{media_tempo_em_minutos_servicos:02}"
-  percentual_horas_concluidos = round(media_tempo_em_horas_servicos / indicador_auditoria.tempo_limite, 2) * 100 if indicador_auditoria.tempo_limite > 0 else 0
-
-  mes_atual, ano_atual = map(int, periodo.split('/'))
-  periodos_do_ano = []
-  for mes in range(mes_atual, 0, -1):
-    periodos_do_ano.append(f'{mes:02d}/{ano_atual}')
-
-  qtde_servicos_concluidos_no_ano = 0
-  for periodo_acumulado in periodos_do_ano:
-    qtde_servicos_concluidos = indicador_auditoria.servicos.filter(periodo=periodo_acumulado, status='CON').count()
-    qtde_servicos_concluidos_no_ano += qtde_servicos_concluidos
-
-  metricas = {
-    'programados': qtde_servicos_programados,
-    'concluidos': qtde_servicos_concluidos,
-    'percentual_concluidos': media_em_percentual,
-    'media_em_horas': media_tempo_em_horas_e_minutos_servicos,
-    'percentual_horas_concluidos': percentual_horas_concluidos,
-    'qtde_servicos_concluidos_no_ano': qtde_servicos_concluidos_no_ano,
-  }
+  metricas = MetricasIndicador(indicador_auditoria, servicos, periodo).gerar()
 
   template = loader.get_template("gestao_de_indicadores/index.html")
   context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas, "clientes": clientes }
@@ -60,52 +35,19 @@ def busca_indicador(request, indicador_id):
   indicador = Indicador.objects.get(id=indicador_id)
 
   if indicador.indicador_geral:
-    mes_atual, ano_atual = map(int, periodo.split('/'))
-    periodos_do_ano = []
-    for mes in range(mes_atual, 0, -1):
-      periodos_do_ano.append(f'{mes:02d}/{ano_atual}')
-
     subindicadores = indicador.subindicadores.all().order_by("ordenacao")
-    subindicadores_servicos = []
-    for subindicador in subindicadores:
-      qtde_servicos_concluidos_no_ano = 0
-      for periodo_acumulado in periodos_do_ano:
-        qtde_servicos_concluidos = subindicador.servicos.filter(periodo=periodo_acumulado, status='CON').count()
-        qtde_servicos_concluidos_no_ano += qtde_servicos_concluidos
 
+    subindicadores_servicos = []
+
+    for subindicador in subindicadores:
       servicos = subindicador.servicos.filter(periodo=periodo)
 
       if cliente:
         servicos = servicos.filter(cliente_id=cliente)
 
-      servicos_concluidos = servicos.filter(status='CON')
-      
-      qtde_servicos_concluidos = servicos_concluidos.count()
-      qtde_servicos_total = servicos.count()
-      percentual_servicos_concluidos = round(qtde_servicos_concluidos / qtde_servicos_total, 2) * 100 if qtde_servicos_total > 0 else 0
-      
-      tempo_total_servicos = sum(servico.tempo_total_em_segundos() for servico in servicos_concluidos)
-      media_tempo_servicos = tempo_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and tempo_total_servicos > 0 else 0
-      media_tempo_em_horas_servicos = (media_tempo_servicos / 3600) if media_tempo_servicos > 0 else 0
-      media_tempo_em_minutos_servicos = int(media_tempo_servicos % 3600 // 60) if media_tempo_servicos > 0 else 0
-      media_tempo_em_horas_e_minutos_servicos = f"{int(media_tempo_em_horas_servicos):02}:{media_tempo_em_minutos_servicos:02}"
-      percentual_tempo_em_horas_servicos = round(media_tempo_em_horas_servicos / subindicador.tempo_limite, 2) * 100 if subindicador.tempo_limite > 0 else 0
+      metricas = MetricasIndicador(subindicador, servicos, periodo).gerar()
+      subindicadores_servicos.append(metricas)
 
-      dias_total_servicos = sum(servico.dias_total() for servico in servicos_concluidos)
-      media_dias_servicos = dias_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and dias_total_servicos > 0 else 0
-      percentual_dias_servicos = round((media_dias_servicos * 100) / subindicador.tempo_limite, 2) if subindicador.tempo_limite and media_dias_servicos > 0 else 0
-
-      subindicadores_servicos.append({
-        'indicador': subindicador,
-        'qtde_servicos_concluidos': qtde_servicos_concluidos,
-        'qtde_servicos_total': qtde_servicos_total,
-        'percentual_servicos_concluidos': percentual_servicos_concluidos,
-        'media_tempo_em_horas_servicos': media_tempo_em_horas_e_minutos_servicos,
-        'media_dias_servicos': int(media_dias_servicos),
-        'percentual_tempo_em_horas_servicos': percentual_tempo_em_horas_servicos,
-        'percentual_dias_servicos': percentual_dias_servicos,
-        'qtde_servicos_concluidos_no_ano': qtde_servicos_concluidos_no_ano
-      })
     data = {'indicador': indicador, 'subindicadores': subindicadores_servicos}
   else:
     servicos = indicador.servicos.filter(periodo=periodo)
@@ -113,40 +55,7 @@ def busca_indicador(request, indicador_id):
     if cliente:
       servicos = servicos.filter(cliente_id=cliente)
 
-    qtde_servicos_programados = servicos.count()
-    qtde_servicos_concluidos = servicos.filter(status='CON').count()
-    media_em_percentual = round(qtde_servicos_concluidos / qtde_servicos_programados, 2) * 100 if qtde_servicos_programados > 0 else 0
-    tempo_total_servicos = sum(servico.tempo_total_em_segundos() for servico in servicos)
-    media_tempo_servicos = tempo_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and tempo_total_servicos > 0 else 0
-    media_tempo_em_horas_servicos = (media_tempo_servicos / 3600) if media_tempo_servicos > 0 else 0
-    media_tempo_em_minutos_servicos = int(media_tempo_servicos % 3600 // 60) if media_tempo_servicos > 0 else 0
-    media_tempo_em_horas_e_minutos_servicos = f"{int(media_tempo_em_horas_servicos):02}:{media_tempo_em_minutos_servicos:02}"
-    percentual_horas_concluidos = round(media_tempo_em_horas_servicos / indicador.tempo_limite, 2) * 100 if indicador.tempo_limite > 0 else 0
-  
-    dias_total_servicos = sum(servico.dias_total() for servico in servicos)
-    media_dias_servicos = dias_total_servicos / qtde_servicos_concluidos if qtde_servicos_concluidos and dias_total_servicos > 0 else 0
-    percentual_dias_servicos = round((media_dias_servicos * 100) / indicador.tempo_limite, 2) if indicador.tempo_limite and media_dias_servicos > 0 else 0
-
-    mes_atual, ano_atual = map(int, periodo.split('/'))
-    periodos_do_ano = []
-    for mes in range(mes_atual, 0, -1):
-      periodos_do_ano.append(f'{mes:02d}/{ano_atual}')
-
-    qtde_servicos_concluidos_no_ano = 0
-    for periodo_acumulado in periodos_do_ano:
-      qtd_servicos_concluidos = indicador.servicos.filter(periodo=periodo_acumulado, status='CON').count()
-      qtde_servicos_concluidos_no_ano += qtd_servicos_concluidos
-
-    metricas = {
-      'programados': qtde_servicos_programados,
-      'concluidos': qtde_servicos_concluidos,
-      'percentual_concluidos': media_em_percentual,
-      'media_em_horas': media_tempo_em_horas_e_minutos_servicos,
-      'percentual_horas_concluidos': percentual_horas_concluidos,
-      'qtde_servicos_concluidos_no_ano': qtde_servicos_concluidos_no_ano,
-      'media_em_dias': media_dias_servicos,
-      'percentual_dias_concluidos': percentual_dias_servicos,
-    }
+    metricas = MetricasIndicador(indicador, servicos, periodo).gerar()
 
     data = {'indicador': indicador, 'servicos': servicos, 'metricas': metricas}
   
