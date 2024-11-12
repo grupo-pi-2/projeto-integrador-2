@@ -20,6 +20,7 @@ class Indicador(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     indicador_geral = models.BooleanField(default=False)
     indicador_pai = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='subindicadores')
+    ordenacao = models.IntegerField(default=1)
 
     def __str__(self):
         return str(model_to_dict(self))
