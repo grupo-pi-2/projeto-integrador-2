@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const indicadorContainer = document.getElementById('indicador-container');
   const selectPeriodo = document.getElementById('periodo-select');
   const selectCliente = document.getElementById('cliente-select');
+  const loadingSpinner = document.getElementById('loading-spinner');
 
   buttons.forEach(button => {
     button.addEventListener('click', function() {
@@ -12,12 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
       const indicadorId = this.getAttribute('data-indicador-id');
       const periodoSelecionado = selectPeriodo.value || mesAnoAtual();
 
+      loadingSpinner.style.display = 'block';
+      indicadorContainer.style.display = 'none';
+      buttons.forEach(btn => btn.disabled = true);
+      selectPeriodo.disabled = true;
+      selectCliente.disabled = true;
+
       fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}&cliente_id=${selectCliente.value}`)
         .then(response => response.text())
         .then(data => {
           indicadorContainer.innerHTML = data;
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+          loadingSpinner.style.display = 'none';
+          indicadorContainer.style.display = 'block';
+          buttons.forEach(btn => btn.disabled = false);
+          selectPeriodo.disabled = false;
+          selectCliente.disabled = false;
+        });
     });
   });
 
