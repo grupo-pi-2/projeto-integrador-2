@@ -17,13 +17,16 @@
       <a class="navbar-brand col-md-2" href="/">
         <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
       </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <div class="collapse navbar-collapse col-md-10" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link nav-title" href="/clientes">Clientes</span></a>
+            <a class="nav-link nav-title" href="/clientes">Clientes</a>
           </li>
         </ul>
-      </div> 
+      </div>
     </nav>
     <div class="container-fluid">
       {% block content %}
