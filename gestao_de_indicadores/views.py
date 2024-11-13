@@ -5,6 +5,7 @@ from django.template import loader
 from datetime import datetime
 
 from .models import Indicador, Cliente, Servico
+from django.contrib.auth.models import User
 
 from gestao_de_indicadores.services.metricas_indicador import MetricasIndicador
 
@@ -20,10 +21,12 @@ def index(request):
   
   clientes = Cliente.objects.all()
 
+  responsaveis = User.objects.filter(is_superuser=False, is_staff=False)
+
   metricas = MetricasIndicador(indicador_auditoria, servicos, periodo).gerar()
 
   template = loader.get_template("gestao_de_indicadores/index.html")
-  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas, "clientes": clientes }
+  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas, "clientes": clientes, "responsaveis": responsaveis }
   return HttpResponse(template.render(context, request))
 
 def busca_indicador(request, indicador_id):
@@ -31,6 +34,7 @@ def busca_indicador(request, indicador_id):
   periodo_padrao = data_atual.strftime('%m/%Y')
   periodo = request.GET.get('periodo') or periodo_padrao
   cliente = request.GET.get('cliente_id')
+  responsavel = request.GET.get('responsavel_id')
 
   indicador = Indicador.objects.get(id=indicador_id)
 
@@ -45,6 +49,9 @@ def busca_indicador(request, indicador_id):
       if cliente:
         servicos = servicos.filter(cliente_id=cliente)
 
+      if responsavel:
+        servicos = servicos.filter(responsavel_id=responsavel)
+
       metricas = MetricasIndicador(subindicador, servicos, periodo).gerar()
       subindicadores_servicos.append(metricas)
 
@@ -54,6 +61,9 @@ def busca_indicador(request, indicador_id):
 
     if cliente:
       servicos = servicos.filter(cliente_id=cliente)
+
+    if responsavel:
+      servicos = servicos.filter(responsavel_id=responsavel)
 
     metricas = MetricasIndicador(indicador, servicos, periodo).gerar()
 
@@ -71,6 +81,12 @@ def lista_status_servico(request):
   statuses = Servico.Status.choices
   status_mapeados = [{"id": status[0], "descricao": status[1]} for status in statuses]
   return JsonResponse(status_mapeados, safe=False, content_type='application/json')
+
+def lista_responsaveis(request):
+  responsaveis = User.objects.filter(is_superuser=False, is_staff=False)
+  responsaveis_mapeados = [{ "id": responsavel.id, "nome": responsavel.get_full_name() } for responsavel in responsaveis]
+
+  return JsonResponse(responsaveis_mapeados, safe=False, content_type='application/json')
 
 def cria_servico(request):
   if request.method == 'POST':
@@ -100,7 +116,8 @@ def busca_servico(request, servico_id):
     "data_hora_inicio": servico.data_hora_inicio,
     "data_hora_fim": servico.data_hora_fim,
     "status": servico.status,
-    "periodo": servico.periodo
+    "periodo": servico.periodo,
+    "responsavel_id": servico.responsavel_id,
   }
   return JsonResponse(servico_mapeado, safe=False, content_type='application/json')
 

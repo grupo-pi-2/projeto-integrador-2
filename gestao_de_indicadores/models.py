@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 # Create your models here.
 class Setor(models.Model):
@@ -59,6 +60,11 @@ class Servico(models.Model):
     periodo = models.CharField(max_length=7)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    responsavel = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='servicos',
+    )
 
     def __str__(self):
         return str(model_to_dict(self))

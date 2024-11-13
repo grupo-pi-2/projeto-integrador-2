@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const indicadorContainer = document.getElementById('indicador-container');
   const selectPeriodo = document.getElementById('periodo-select');
   const selectCliente = document.getElementById('cliente-select');
+  const selectResponsavel = document.getElementById('responsavel-select');
+
   const loadingSpinner = document.getElementById('loading-spinner');
 
   buttons.forEach(button => {
@@ -18,8 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
       buttons.forEach(btn => btn.disabled = true);
       selectPeriodo.disabled = true;
       selectCliente.disabled = true;
+      selectResponsavel.disabled = true;
 
-      fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}&cliente_id=${selectCliente.value}`)
+      fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}&cliente_id=${selectCliente.value}&responsavel_id=${selectResponsavel.value}`)
         .then(response => response.text())
         .then(data => {
           indicadorContainer.innerHTML = data;
@@ -31,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
           buttons.forEach(btn => btn.disabled = false);
           selectPeriodo.disabled = false;
           selectCliente.disabled = false;
+          selectResponsavel.disabled = false;
         });
     });
   });
@@ -43,6 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   selectCliente.addEventListener('change', function() {
+    const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
+    if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
+  });
+
+  selectResponsavel.addEventListener('change', function() {
     const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
     if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
   });
@@ -98,6 +107,20 @@ function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
     })
     .catch(error => console.error('Erro ao carregar status de serviços:', error));
 
+    fetch('/lista_responsaveis/')
+    .then(response => response.json())
+    .then(responsaveis => {
+      const selectResponsavel = document.getElementById('responsavel-servico');
+      selectResponsavel.innerHTML = '<option selected value="">Selecione o responsável</option>';
+      responsaveis.forEach(responsavel => {
+        const option = document.createElement('option');
+        option.value = responsavel.id;
+        option.textContent = responsavel.nome;
+        selectResponsavel.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Erro ao carregar responsáveis:', error));
+
     const selectPeriodoServico = document.getElementById('periodo-servico');
     const periodos = gerarPeriodos();
     selectPeriodoServico.innerHTML = '<option selected value="">Selecione o período</option>';
@@ -124,6 +147,7 @@ function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
         document.getElementById('data-hora-fim-servico').value = dataHoraFim.slice(0, 16);
         document.getElementById('status-servico').value = servico.status;
         document.getElementById('periodo-servico').value = servico.periodo;
+        document.getElementById('responsavel-servico').value = servico.responsavel_id;
       })
       .catch(error => console.error('Erro ao buscar serviço:', error));
     }
