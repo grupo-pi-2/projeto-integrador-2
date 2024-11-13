@@ -1,20 +1,77 @@
 document.addEventListener('DOMContentLoaded', function() {
   const buttons = document.querySelectorAll('.btn-menu-indicador');
   const indicadorContainer = document.getElementById('indicador-container');
+  const selectPeriodo = document.getElementById('periodo-select');
+  const selectCliente = document.getElementById('cliente-select');
+  const selectResponsavel = document.getElementById('responsavel-select');
+
+  const loadingSpinner = document.getElementById('loading-spinner');
 
   buttons.forEach(button => {
     button.addEventListener('click', function() {
-      const indicadorId = this.getAttribute('data-indicador-id');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
 
-      fetch(`/busca_indicador/${indicadorId}`)
+      const indicadorId = this.getAttribute('data-indicador-id');
+      const periodoSelecionado = selectPeriodo.value || mesAnoAtual();
+
+      loadingSpinner.style.display = 'block';
+      indicadorContainer.style.display = 'none';
+      buttons.forEach(btn => btn.disabled = true);
+      selectPeriodo.disabled = true;
+      selectCliente.disabled = true;
+      selectResponsavel.disabled = true;
+
+      fetch(`/busca_indicador/${indicadorId}?periodo=${periodoSelecionado}&cliente_id=${selectCliente.value}&responsavel_id=${selectResponsavel.value}`)
         .then(response => response.text())
         .then(data => {
           indicadorContainer.innerHTML = data;
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+          loadingSpinner.style.display = 'none';
+          indicadorContainer.style.display = 'block';
+          buttons.forEach(btn => btn.disabled = false);
+          selectPeriodo.disabled = false;
+          selectCliente.disabled = false;
+          selectResponsavel.disabled = false;
+        });
     });
   });
+
+  preencherSelectPeriodos();
+  
+  selectPeriodo.addEventListener('change', function() {
+    const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
+    if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
+  });
+
+  selectCliente.addEventListener('change', function() {
+    const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
+    if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
+  });
+
+  selectResponsavel.addEventListener('change', function() {
+    const botaoIndicadorAtivo = document.querySelector('.btn-menu-indicador.active');
+    if (botaoIndicadorAtivo) { botaoIndicadorAtivo.click(); }
+  });
 });
+
+function preencherSelectPeriodos() {
+  const periodos = gerarPeriodos();
+  const select = document.getElementById('periodo-select');
+  const mesAno = mesAnoAtual();
+
+  periodos.forEach(periodo => {
+    const option = document.createElement('option');
+    option.value = periodo;
+    option.textContent = periodo;
+    if (periodo === mesAno) {
+      option.selected = true;
+    }
+    select.appendChild(option);
+  });
+}
 
 function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
   fetch('/lista_clientes/')
@@ -50,6 +107,20 @@ function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
     })
     .catch(error => console.error('Erro ao carregar status de serviços:', error));
 
+    fetch('/lista_responsaveis/')
+    .then(response => response.json())
+    .then(responsaveis => {
+      const selectResponsavel = document.getElementById('responsavel-servico');
+      selectResponsavel.innerHTML = '<option selected value="">Selecione o responsável</option>';
+      responsaveis.forEach(responsavel => {
+        const option = document.createElement('option');
+        option.value = responsavel.id;
+        option.textContent = responsavel.nome;
+        selectResponsavel.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Erro ao carregar responsáveis:', error));
+
     const selectPeriodoServico = document.getElementById('periodo-servico');
     const periodos = gerarPeriodos();
     selectPeriodoServico.innerHTML = '<option selected value="">Selecione o período</option>';
@@ -76,6 +147,7 @@ function carregarDadosModalDeServico(indicadorId, setorId, servicoId) {
         document.getElementById('data-hora-fim-servico').value = dataHoraFim.slice(0, 16);
         document.getElementById('status-servico').value = servico.status;
         document.getElementById('periodo-servico').value = servico.periodo;
+        document.getElementById('responsavel-servico').value = servico.responsavel_id;
       })
       .catch(error => console.error('Erro ao buscar serviço:', error));
     }
@@ -246,4 +318,11 @@ function pesquisarCnpj(cnpj) {
   } else {
     alert("Por favor, insira um CNPJ para pesquisar.");
   }
+}
+
+function mesAnoAtual() {
+  const dataAtual = new Date();
+  const mesAtual = String(dataAtual.getMonth() + 1).padStart(2, '0');
+  const anoAtual = dataAtual.getFullYear();
+  return `${mesAtual}/${anoAtual}`;
 }
