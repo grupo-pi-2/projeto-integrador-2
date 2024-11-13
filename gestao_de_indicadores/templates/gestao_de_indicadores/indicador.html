@@ -95,7 +95,7 @@
                     {% endif %}
                     <td class="col-md-1" data-th="Status">{{ servico.get_status_display }}</td>
                     <td class="col-md-1" data-th="Período">{{ servico.periodo }}</td>
-                    <td class="col-md-1" data-th="Responsável"></td>
+                    <td class="col-md-1" data-th="Responsável">{{ servico.responsavel.get_full_name }}</td>
                     <td class="col-md-1 text-center">
                       <i
                       class="fa-solid fa-pen-to-square icon-servico"
