@@ -68,7 +68,7 @@ class Servico(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
-    
+
     def tempo_total_formatado(self):
         total = self.data_hora_fim - self.data_hora_inicio
         total_segundos = total.total_seconds()
@@ -79,7 +79,7 @@ class Servico(models.Model):
     def tempo_total_em_segundos(self):
         total = self.data_hora_fim - self.data_hora_inicio
         return total.total_seconds()
-    
+
     def dias_total_formatado(self):
         total = self.data_hora_fim - self.data_hora_inicio
         return f"{total.days}"
