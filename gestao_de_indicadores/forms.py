@@ -4,7 +4,7 @@ from .models import Servico, Cliente
 class ServicoForm(forms.ModelForm):
     class Meta:
       model = Servico
-      fields = ['cliente', 'data_hora_inicio', 'data_hora_fim', 'indicador', 'setor', 'status', 'periodo', 'responsavel']
+      fields = ['cliente', 'data_hora_inicio', 'data_hora_fim', 'indicador', 'setor', 'status', 'periodo']
       widgets = {
         'data_hora_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         'data_hora_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
@@ -17,7 +17,6 @@ class ServicoForm(forms.ModelForm):
         'setor': 'Setor',
         'status': 'Status',
         'periodo': 'Período',
-        'responsavel': 'Responsável',
       }
 
 class ClienteForm(forms.ModelForm):
