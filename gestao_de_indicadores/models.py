@@ -28,7 +28,7 @@ class Indicador(models.Model):
 
     def is_auditorias(self):
         return self.nome == "Auditorias"
-    
+
     def is_painel_kpi(self):
         return self.nome == "Painel KPI"
     
@@ -68,7 +68,7 @@ class Servico(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
-
+    
     def tempo_total_formatado(self):
         total = self.data_hora_fim - self.data_hora_inicio
         total_segundos = total.total_seconds()
