@@ -25,7 +25,7 @@ class Indicador(models.Model):
 
     def __str__(self):
         return str(model_to_dict(self))
-    
+
     def is_auditorias(self):
         return self.nome == "Auditorias"
 
@@ -83,7 +83,7 @@ class Servico(models.Model):
     def dias_total_formatado(self):
         total = self.data_hora_fim - self.data_hora_inicio
         return f"{total.days}"
-
+    
     def dias_total(self):
         total = self.data_hora_fim - self.data_hora_inicio
         return total.days
