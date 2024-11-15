@@ -2,7 +2,6 @@
 
 <!DOCTYPE html>
   <html lang="pt-br">
-  <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +15,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand col-md-2" href="/">
-          <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
+        <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -50,10 +49,10 @@
     </nav>
 
     <div class="container-fluid">
-    {% block content %}
-    {% endblock %}
+      {% block content %}
+      {% endblock %}
     </div>
     {% bootstrap_javascript %}
     <script src="{% static 'gestao_de_indicadores/js/script.js' %}"></script>
   </body>
-  </html>
+</html>
