@@ -183,5 +183,5 @@ def exclui_cliente(request, cliente_id):
   if request.method == 'DELETE':
     cliente.delete()
     return JsonResponse({'success': True})
-
+  
 
