@@ -35,12 +35,12 @@ class ServicoFormTestCase(TestCase):
 
     form_data = {
       'cliente': cliente.id,
-      'data_hora_inicio': datetime(2021, 1, 1, 0, 0),
-      'data_hora_fim': datetime(2021, 1, 1, 1, 0),
+      'data_hora_inicio': datetime(2024, 11, 1, 0, 0),
+      'data_hora_fim': datetime(2024, 11, 1, 1, 0),
       'indicador': indicador.id,
       'setor': setor.id,
       'status': 'PEN',
-      'periodo': '01/2024',
+      'periodo': '11/2024',
       'responsavel': responsavel.id,
     }
     form = ServicoForm(data=form_data)

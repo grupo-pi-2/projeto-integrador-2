@@ -13,7 +13,7 @@ class IndexTestCase(TestCase):
         cliente = Cliente.objects.create(razao_social="Cliente Teste")
         responsavel = User.objects.create(username="user", is_superuser=False, is_staff=False)
         indicador = Indicador.objects.get(nome="Auditorias")
-        indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 1, 1, 0, 0), data_hora_fim=datetime(2024, 1, 2, 1, 0), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
+        indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 11, 1, 0, 0), data_hora_fim=datetime(2024, 11, 2, 1, 0), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
 
     def test_index_view(self):
         response = self.client.get(self.url)
@@ -31,14 +31,14 @@ class BuscaIndicadorTestCase(TestCase):
         setor = Setor.objects.create(nome="Setor")
         cliente = Cliente.objects.create(razao_social="Cliente Teste")
         responsavel = User.objects.create(username="user", is_superuser=False, is_staff=False)
-        indicador = Indicador.objects.get(nome="Auditorias")
-        indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 1, 1, 0, 0), data_hora_fim=datetime(2024, 1, 2, 1, 0), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
+        self.indicador = Indicador.objects.get(nome="Auditorias")
+        self.indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 11, 1, 0, 0), data_hora_fim=datetime(2024, 11, 2, 1, 0), setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
+        self.indicador_geral = Indicador.objects.get(nome="Painel KPI", indicador_geral=True)
 
         self.client = Client()
 
     def test_busca_indicador_view(self):
-        indicador = Indicador.objects.get(nome="Auditorias")
-        url = reverse("busca_indicador", args=[indicador.id])
+        url = reverse("busca_indicador", args=[self.indicador.id])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -46,8 +46,7 @@ class BuscaIndicadorTestCase(TestCase):
         self.assertIn("servicos", response.context)
 
     def test_busca_indicador_geral_view(self):
-        indicador_geral = Indicador.objects.get(nome="Painel KPI", indicador_geral=True)
-        url = reverse("busca_indicador", args=[indicador_geral.id])
+        url = reverse("busca_indicador", args=[self.indicador_geral.id])
         response = self.client.get(url)
 
         self.assertIn("indicador", response.context)
@@ -58,9 +57,7 @@ class ListaClientesTestCase(TestCase):
         self.client = Client()
         self.url = reverse("lista_clientes")
 
-        cliente = Cliente.objects.create(razao_social="Cliente Teste", cnpj="12345678000195")
-        
-        self.cliente = cliente
+        self.cliente = Cliente.objects.create(razao_social="Cliente Teste", cnpj="12345678000195")
 
     def test_lista_clientes_view(self):
         response = self.client.get(self.url)
@@ -96,9 +93,7 @@ class ListaResponsaveisTestCase(TestCase):
         self.client = Client()
         self.url = reverse("lista_responsaveis")
 
-        user = User.objects.create_user(username="Maria", first_name="Maria")
-
-        self.user = user
+        self.user = User.objects.create_user(username="Maria", first_name="Maria")
 
     def test_lista_responsaveis_view(self):
         response = self.client.get(self.url)
@@ -122,8 +117,8 @@ class CriaServicoTestCase(TestCase):
 
         self.data = {
             "cliente": cliente.id,
-            "data_hora_inicio": "2024-01-01T00:00",
-            "data_hora_fim": "2024-01-02T01:00",
+            "data_hora_inicio": "2024-11-01T00:00",
+            "data_hora_fim": "2024-11-02T01:00",
             "indicador": indicador.id,
             "setor": setor.id,
             "status": "CON",
@@ -158,35 +153,31 @@ class ExcluiServicoTestCase(TestCase):
         setor = Setor.objects.create(nome="Setor")
         cliente = Cliente.objects.create(razao_social="Cliente Teste")
         responsavel = User.objects.create(username="user", is_superuser=False, is_staff=False)
-        indicador = Indicador.objects.get(nome="Auditorias")
-        servico = indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 1, 1, 0, 0), data_hora_fim=datetime(2024, 1, 2, 1, 0), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
+        self.indicador = Indicador.objects.get(nome="Auditorias")
+        servico = self.indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 11, 1, 0, 0), data_hora_fim=datetime(2024, 11, 2, 1, 0), setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
 
         self.url = reverse("exclui_servico", args=[servico.id])
 
     def test_exclui_servico_view(self):
-        indicador = Indicador.objects.get(nome="Auditorias")
         response = self.client.delete(self.url)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/json")
         servico = response.json()
         self.assertEqual(servico["success"], True)
-        self.assertEqual(servico["indicador"], indicador.id)
+        self.assertEqual(servico["indicador"], self.indicador.id)
         
 class BuscaServicoTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
         setor = Setor.objects.create(nome="Setor")
-        cliente = Cliente.objects.create(razao_social="Cliente Teste")
-        responsavel = User.objects.create(username="user", is_superuser=False, is_staff=False)
+        self.cliente = Cliente.objects.create(razao_social="Cliente Teste")
+        self.responsavel = User.objects.create(username="user", is_superuser=False, is_staff=False)
         indicador = Indicador.objects.get(nome="Auditorias")
-        servico = indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 1, 1, 0, 0), data_hora_fim=datetime(2024, 1, 2, 1, 0), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
+        self.servico = indicador.servicos.create(cliente=self.cliente, data_hora_inicio=datetime(2024, 11, 1, 0, 0), data_hora_fim=datetime(2024, 11, 2, 1, 0), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=self.responsavel)
 
-        self.cliente = cliente
-        self.servico = servico
-        self.responsavel = responsavel
-        self.url = reverse("busca_servico", args=[servico.id])
+        self.url = reverse("busca_servico", args=[self.servico.id])
 
     def test_busca_servico_view(self):
         response = self.client.get(self.url)
@@ -196,8 +187,8 @@ class BuscaServicoTestCase(TestCase):
         servico = response.json()
         self.assertEqual(servico["id"], self.servico.id)
         self.assertEqual(servico["cliente_id"], self.cliente.id)
-        self.assertEqual(servico["data_hora_inicio"], "2024-01-01T00:00:00Z")
-        self.assertEqual(servico["data_hora_fim"], "2024-01-02T01:00:00Z")
+        self.assertEqual(servico["data_hora_inicio"], "2024-11-01T00:00:00Z")
+        self.assertEqual(servico["data_hora_fim"], "2024-11-02T01:00:00Z")
         self.assertEqual(servico["status"], "CON")
         self.assertEqual(servico["periodo"], "01/2024")
         self.assertEqual(servico["responsavel_id"], self.responsavel.id)
@@ -209,24 +200,22 @@ class AtualizaServicoTestCase(TestCase):
         setor = Setor.objects.create(nome="Setor")
         cliente = Cliente.objects.create(razao_social="Cliente Teste")
         responsavel = User.objects.create(username="user", is_superuser=False, is_staff=False)
-        indicador = Indicador.objects.get(nome="Auditorias")
-        servico = indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 1, 1, 0, 0), data_hora_fim=datetime(2024, 1, 2, 1, 0), indicador=indicador, setor=setor, status="PEN", periodo="01/2024", responsavel=responsavel)
+        self.indicador = Indicador.objects.get(nome="Auditorias")
+        servico = self.indicador.servicos.create(cliente=cliente, data_hora_inicio=datetime(2024, 11, 1, 0, 0), data_hora_fim=datetime(2024, 11, 2, 1, 0), setor=setor, status="PEN", periodo="01/2024", responsavel=responsavel)
 
         self.url = reverse("atualiza_servico", args=[servico.id])
 
         self.data = {
             "cliente": cliente.id,
-            "data_hora_inicio": "2024-01-01T00:00",
-            "data_hora_fim": "2024-01-02T01:00",
-            "indicador": indicador.id,
+            "data_hora_inicio": "2024-11-01T00:00",
+            "data_hora_fim": "2024-11-02T01:00",
+            "indicador": self.indicador.id,
             "setor": setor.id,
             "status": "CON",
             "periodo": "01/2024",
             "responsavel": responsavel.id
         }
         
-        self.indicador = indicador
-
     def test_atualiza_servico_view(self):
         response = self.client.post(self.url, self.data)
 
@@ -252,9 +241,7 @@ class ClientesTestCase(TestCase):
         self.client = Client()
         self.url = reverse("clientes")
 
-        cliente = Cliente.objects.create(razao_social="Cliente Teste", cnpj="12345678000195")
-        
-        self.cliente = cliente
+        Cliente.objects.create(razao_social="Cliente Teste", cnpj="12345678000195")
 
     def test_clientes_view(self):
         response = self.client.get(self.url)
@@ -295,13 +282,10 @@ class BuscaClienteTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
-        cliente = Cliente.objects.create(razao_social="Cliente", cnpj="12345678901234")
+        self.cliente = Cliente.objects.create(razao_social="Cliente", cnpj="12345678901234")
         
-        self.cliente = cliente
-    
     def test_busca_cliente_view(self):
-        cliente = Cliente.objects.get(razao_social="Cliente")
-        url = reverse("busca_cliente", args=[cliente.id])
+        url = reverse("busca_cliente", args=[self.cliente.id])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -315,17 +299,15 @@ class AtualizaClienteTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
-        cliente = Cliente.objects.create(razao_social="Cliente", cnpj="12345678901234")
+        self.cliente = Cliente.objects.create(razao_social="Cliente", cnpj="12345678901234")
 
-        self.url = reverse("atualiza_cliente", args=[cliente.id])
+        self.url = reverse("atualiza_cliente", args=[self.cliente.id])
 
         self.data = {
             "razao_social": "Cliente Teste",
             "cnpj": "12345678901234"
         }
         
-        self.cliente = cliente
-
     def test_atualiza_cliente_view(self):
         response = self.client.post(self.url, self.data)
 

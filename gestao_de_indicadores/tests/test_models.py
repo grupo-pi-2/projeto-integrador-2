@@ -92,7 +92,7 @@ class ServicoTestCase(TestCase):
     indicador = Indicador.objects.create(nome="Indicador", tipo_de_tempo_limite="horas", tempo_limite=5, indicador_geral=True, setor=setor)
     cliente = Cliente.objects.create(razao_social="Cliente", cnpj="12345678901234")
     responsavel =  User.objects.create_user(username="Maria")
-    Servico.objects.create(cliente=cliente, data_hora_inicio=datetime(2024, 1, 1, 0, 0, tzinfo=timezone.utc), data_hora_fim=datetime(2024, 1, 2, 1, 0, tzinfo=timezone.utc), indicador=indicador, setor=setor, status="CON", periodo="01/2024", responsavel=responsavel)
+    Servico.objects.create(cliente=cliente, data_hora_inicio=datetime(2024, 11, 1, 0, 0, tzinfo=timezone.utc), data_hora_fim=datetime(2024, 11, 2, 1, 0, tzinfo=timezone.utc), indicador=indicador, setor=setor, status="CON", periodo="11/2024", responsavel=responsavel)
 
   def test_servico_str(self):
     servico = Servico.objects.get(cliente__razao_social="Cliente")
@@ -104,7 +104,7 @@ class ServicoTestCase(TestCase):
       'indicador': servico.indicador_id,
       'setor': servico.setor_id,
       'status': "CON",
-      'periodo': "01/2024",
+      'periodo': "11/2024",
       'responsavel': servico.responsavel_id
     }))
   
@@ -114,11 +114,11 @@ class ServicoTestCase(TestCase):
     
   def test_servico_data_hora_inicio(self):
     servico = Servico.objects.get(cliente__razao_social="Cliente")
-    self.assertEqual(servico.data_hora_inicio.isoformat().replace('+00:00', 'Z'), '2024-01-01T00:00:00Z')
+    self.assertEqual(servico.data_hora_inicio.isoformat().replace('+00:00', 'Z'), '2024-11-01T00:00:00Z')
     
   def test_servico_data_hora_fim(self):
     servico = Servico.objects.get(cliente__razao_social="Cliente")
-    self.assertEqual(servico.data_hora_fim.isoformat().replace('+00:00', 'Z'), '2024-01-02T01:00:00Z')
+    self.assertEqual(servico.data_hora_fim.isoformat().replace('+00:00', 'Z'), '2024-11-02T01:00:00Z')
     
   def test_servico_indicador(self):
     servico = Servico.objects.get(cliente__razao_social="Cliente")
@@ -134,7 +134,7 @@ class ServicoTestCase(TestCase):
     
   def test_servico_periodo(self):
     servico = Servico.objects.get(cliente__razao_social="Cliente")
-    self.assertEqual(servico.periodo, "01/2024")
+    self.assertEqual(servico.periodo, "11/2024")
     
   def test_servico_responsavel(self):
     servico = Servico.objects.get(cliente__razao_social="Cliente")
