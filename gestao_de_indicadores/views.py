@@ -184,3 +184,4 @@ def exclui_cliente(request, cliente_id):
     cliente.delete()
     return JsonResponse({'success': True})
 
+
