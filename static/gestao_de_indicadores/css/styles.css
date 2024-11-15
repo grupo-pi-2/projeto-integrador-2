@@ -81,3 +81,20 @@ body {
 .form-control {
   font-size: 12px;
 }
+
+/* loading */
+.loading {
+  display: none;
+  text-align: center;
+  padding-top: 36px;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse .nav-link {
+    padding-left: 16px;
+  }
+
+  .navbar-toggler {
+    margin-right: 16px;
+  }
+}

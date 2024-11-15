@@ -1,4 +1,4 @@
-{% load static %}
+{% load django_bootstrap5 static %}
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -6,11 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Estilos customizados -->
+    {% bootstrap_css %}
+    <title>Gestão de Indicadores</title>
     <link href="{% static 'gestao_de_indicadores/css/styles.css' %}" rel="stylesheet">
 
     <!-- Font Awesome -->
@@ -25,15 +22,16 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand col-md-2" href="/">
             <img src="{% static 'gestao_de_indicadores/logo.png' %}" class="nav-bar-style" height="44" alt="">
-        </a>
-        <div class="collapse navbar-collapse col-md-10" id="navbarSupportedContent">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse col-md-10" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link nav-title" href="/clientes">Clientes</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
+              <li class="nav-item active">
+                <a class="nav-link nav-title" href="/clientes">Clientes</a>
+              </li>
+              {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'editar_perfil' %}">Editar Perfil</a>  <!-- Link para editar perfil -->
                         <li class="nav-item">
@@ -51,7 +49,8 @@
                     </li>
                 {% endif %}
             </ul>
-        </div>
+          </div>
+        </a>
     </nav>
 
     <div class="container-fluid">
@@ -59,9 +58,7 @@
         {% endblock %}
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    {% bootstrap_javascript %}
 
     <!-- Script customizado -->
     <script src="{% static 'gestao_de_indicadores/js/script.js' %}"></script>

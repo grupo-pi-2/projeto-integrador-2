@@ -2,22 +2,74 @@ from django.http import HttpResponse, JsonResponse
 from .forms import ServicoForm, ClienteForm
 from django.shortcuts import render, redirect
 from django.template import loader
+from datetime import datetime
 
 from .models import Indicador, Cliente, Servico
+from django.contrib.auth.models import User
+
+from gestao_de_indicadores.services.metricas_indicador import MetricasIndicador
 
 # Create your views here.
 def index(request):
-  indicadores = Indicador.objects.all().order_by("created_at")
+  data_atual = datetime.now()
+  periodo_padrao = data_atual.strftime('%m/%Y')
+  periodo = request.GET.get('periodo') or periodo_padrao
+
+  indicadores = Indicador.objects.all().order_by("ordenacao")
   indicador_auditoria = Indicador.objects.get(nome="Auditorias")
-  servicos = indicador_auditoria.servicos.all()
+  servicos = indicador_auditoria.servicos.filter(periodo=periodo)
+  
+  clientes = Cliente.objects.all()
+
+  responsaveis = User.objects.filter(is_superuser=False, is_staff=False)
+
+  metricas = MetricasIndicador(indicador_auditoria, servicos, periodo).gerar()
+
   template = loader.get_template("gestao_de_indicadores/index.html")
-  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos }
+  context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas, "clientes": clientes, "responsaveis": responsaveis }
   return HttpResponse(template.render(context, request))
 
 def busca_indicador(request, indicador_id):
+  data_atual = datetime.now()
+  periodo_padrao = data_atual.strftime('%m/%Y')
+  periodo = request.GET.get('periodo') or periodo_padrao
+  cliente = request.GET.get('cliente_id')
+  responsavel = request.GET.get('responsavel_id')
+
   indicador = Indicador.objects.get(id=indicador_id)
-  servicos = indicador.servicos.all()
-  html = render(request, 'gestao_de_indicadores/indicador.html', {'indicador': indicador, 'servicos': servicos})
+
+  if indicador.indicador_geral:
+    subindicadores = indicador.subindicadores.all().order_by("ordenacao")
+
+    subindicadores_servicos = []
+
+    for subindicador in subindicadores:
+      servicos = subindicador.servicos.filter(periodo=periodo)
+
+      if cliente:
+        servicos = servicos.filter(cliente_id=cliente)
+
+      if responsavel:
+        servicos = servicos.filter(responsavel_id=responsavel)
+
+      metricas = MetricasIndicador(subindicador, servicos, periodo).gerar()
+      subindicadores_servicos.append(metricas)
+
+    data = {'indicador': indicador, 'subindicadores': subindicadores_servicos}
+  else:
+    servicos = indicador.servicos.filter(periodo=periodo)
+
+    if cliente:
+      servicos = servicos.filter(cliente_id=cliente)
+
+    if responsavel:
+      servicos = servicos.filter(responsavel_id=responsavel)
+
+    metricas = MetricasIndicador(indicador, servicos, periodo).gerar()
+
+    data = {'indicador': indicador, 'servicos': servicos, 'metricas': metricas}
+  
+  html = render(request, 'gestao_de_indicadores/indicador.html', data)
   return HttpResponse(html.content, content_type='text/html')
 
 def lista_clientes(request):
@@ -29,6 +81,12 @@ def lista_status_servico(request):
   statuses = Servico.Status.choices
   status_mapeados = [{"id": status[0], "descricao": status[1]} for status in statuses]
   return JsonResponse(status_mapeados, safe=False, content_type='application/json')
+
+def lista_responsaveis(request):
+  responsaveis = User.objects.filter(is_superuser=False, is_staff=False)
+  responsaveis_mapeados = [{ "id": responsavel.id, "nome": responsavel.get_full_name() } for responsavel in responsaveis]
+
+  return JsonResponse(responsaveis_mapeados, safe=False, content_type='application/json')
 
 def cria_servico(request):
   if request.method == 'POST':
@@ -58,7 +116,8 @@ def busca_servico(request, servico_id):
     "data_hora_inicio": servico.data_hora_inicio,
     "data_hora_fim": servico.data_hora_fim,
     "status": servico.status,
-    "periodo": servico.periodo
+    "periodo": servico.periodo,
+    "responsavel_id": servico.responsavel_id,
   }
   return JsonResponse(servico_mapeado, safe=False, content_type='application/json')
 
@@ -124,5 +183,3 @@ def exclui_cliente(request, cliente_id):
   if request.method == 'DELETE':
     cliente.delete()
     return JsonResponse({'success': True})
-  
-

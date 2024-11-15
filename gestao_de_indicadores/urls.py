@@ -1,11 +1,11 @@
-from django.urls import include, path
+from django.urls import path
+from . import views
 
 from usuarios.views import  cadastro_view, editar_perfil_view, login_view
 
 from django.contrib import admin
 
 from django.contrib.auth.views import LogoutView
-from . import views
 
 
 urlpatterns = [
@@ -28,4 +28,5 @@ urlpatterns = [
     path('atualiza_cliente/<int:cliente_id>/', views.atualiza_cliente, name='atualiza_cliente'),
     path('exclui_cliente/<int:cliente_id>/', views.exclui_cliente, name='exclui_cliente'),
     path('busca_cliente/<int:cliente_id>/', views.busca_cliente, name='busca_cliente'),
+    path('lista_responsaveis/', views.lista_responsaveis, name='lista_responsaveis'),
 ]
