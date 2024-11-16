@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['gestao-de-indicadores.onrender.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'usuarios.apps.UsuariosConfig',
     'gestao_de_indicadores.apps.GestaoDeIndicadoresConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -135,3 +136,11 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py
+LOGIN_REDIRECT_URL = 'gestao_de_indicadores:'  # Redireciona para o index após o login
+
+
+LOGOUT_REDIRECT_URL = '/usuarios/login/'  # Redireciona para a página de login após logout
+
+LOGIN_URL = '/usuarios/login/'
