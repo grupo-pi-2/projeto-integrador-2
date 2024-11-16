@@ -84,7 +84,7 @@ def lista_status_servico(request):
 
 def lista_responsaveis(request):
   responsaveis = User.objects.filter(is_superuser=False, is_staff=False)
-  responsaveis_mapeados = [{ "id": responsavel.id, "nome": responsavel.get_full_name() } for responsavel in responsaveis]
+  responsaveis_mapeados = [{ "id": responsavel.id, "nome": responsavel.username } for responsavel in responsaveis]
 
   return JsonResponse(responsaveis_mapeados, safe=False, content_type='application/json')
 

@@ -27,7 +27,7 @@
           <select id="responsavel-select" class="form-select form-control">
             <option></option>
             {% for responsavel in responsaveis %}
-            <option value="{{ responsavel.id }}">{{ responsavel.get_full_name }}</option>
+            <option value="{{ responsavel.id }}">{{ responsavel.username }}</option>
             {% endfor %}
           </select>
         </div>
