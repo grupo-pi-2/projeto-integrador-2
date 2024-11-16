@@ -9,6 +9,9 @@ from django.contrib.auth.models import User
 
 from gestao_de_indicadores.services.metricas_indicador import MetricasIndicador
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 # Create your views here.
 def index(request):
   data_atual = datetime.now()
@@ -29,6 +32,7 @@ def index(request):
   context = { "indicadores": indicadores, "indicador_auditoria": indicador_auditoria, "servicos": servicos, "metricas": metricas, "clientes": clientes, "responsaveis": responsaveis }
   return HttpResponse(template.render(context, request))
 
+@login_required
 def busca_indicador(request, indicador_id):
   data_atual = datetime.now()
   periodo_padrao = data_atual.strftime('%m/%Y')
@@ -72,22 +76,26 @@ def busca_indicador(request, indicador_id):
   html = render(request, 'gestao_de_indicadores/indicador.html', data)
   return HttpResponse(html.content, content_type='text/html')
 
+@login_required
 def lista_clientes(request):
   clientes = Cliente.objects.all()
   clientes_mapeados = [{"id": cliente.id, "razao_social": f"{cliente.cnpj} - {cliente.razao_social}"} for cliente in clientes]
   return JsonResponse(clientes_mapeados, safe=False, content_type='application/json')
 
+@login_required
 def lista_status_servico(request):
   statuses = Servico.Status.choices
   status_mapeados = [{"id": status[0], "descricao": status[1]} for status in statuses]
   return JsonResponse(status_mapeados, safe=False, content_type='application/json')
 
+@login_required
 def lista_responsaveis(request):
   responsaveis = User.objects.filter(is_superuser=False, is_staff=False)
   responsaveis_mapeados = [{ "id": responsavel.id, "nome": responsavel.username } for responsavel in responsaveis]
 
   return JsonResponse(responsaveis_mapeados, safe=False, content_type='application/json')
 
+@login_required
 def cria_servico(request):
   if request.method == 'POST':
     form = ServicoForm(request.POST)
@@ -101,6 +109,7 @@ def cria_servico(request):
   else :
     redirect('index')
 
+@login_required
 def exclui_servico(request, servico_id):
   servico = Servico.objects.get(id=servico_id)
   
@@ -108,6 +117,7 @@ def exclui_servico(request, servico_id):
     servico.delete()
     return JsonResponse({'success': True, 'indicador': servico.indicador_id})
   
+@login_required
 def busca_servico(request, servico_id):
   servico = Servico.objects.get(id=servico_id)
   servico_mapeado = {
@@ -121,6 +131,7 @@ def busca_servico(request, servico_id):
   }
   return JsonResponse(servico_mapeado, safe=False, content_type='application/json')
 
+@login_required
 def atualiza_servico(request, servico_id):
   if request.method == 'POST':
     servico = Servico.objects.get(id=servico_id)
@@ -135,12 +146,14 @@ def atualiza_servico(request, servico_id):
   else :
     redirect('index')
 
+@login_required
 def clientes(request):
   clientes = Cliente.objects.all()
   template = loader.get_template("gestao_de_indicadores/clientes.html")
   context = { "clientes": clientes }
   return HttpResponse(template.render(context, request))
 
+@login_required
 def cria_cliente(request):
   if request.method == 'POST':
     form = ClienteForm(request.POST)
@@ -154,6 +167,7 @@ def cria_cliente(request):
   else :
     redirect('clientes')
 
+@login_required
 def busca_cliente(request, cliente_id):
   cliente = Cliente.objects.get(id=cliente_id)
   cliente_mapeado = {
@@ -163,6 +177,7 @@ def busca_cliente(request, cliente_id):
   }
   return JsonResponse(cliente_mapeado, safe=False, content_type='application/json')
 
+@login_required
 def atualiza_cliente(request, cliente_id):
   if request.method == 'POST':
     cliente = Cliente.objects.get(id=cliente_id)
@@ -177,6 +192,7 @@ def atualiza_cliente(request, cliente_id):
   else :
     redirect('clientes')
 
+@login_required
 def exclui_cliente(request, cliente_id):
   cliente = Cliente.objects.get(id=cliente_id)
   

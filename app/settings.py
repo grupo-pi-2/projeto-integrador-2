@@ -143,3 +143,4 @@ LOGIN_REDIRECT_URL = 'gestao_de_indicadores:'  # Redireciona para o index após 
 
 LOGOUT_REDIRECT_URL = '/usuarios/login/'  # Redireciona para a página de login após logout
 
+LOGIN_URL = '/usuarios/login/'
