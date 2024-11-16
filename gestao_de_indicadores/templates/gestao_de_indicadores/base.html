@@ -25,25 +25,15 @@
           <li class="nav-item active">
             <a class="nav-link nav-title" href="/clientes">Clientes</a>
           </li>
-          {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'editar_perfil' %}">Editar Perfil</a>  <!-- Link para editar perfil -->
-                <li class="nav-item">
-                  <form method="POST" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="nav-link btn btn-link">Logout</button>
-                  </form>
-                </li>
-              </a>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'cadastro' %}">Cadastrar</a>
-            </li>
-          {% endif %}
+          <li class="nav-item align-right">
+            <a class="nav-link" href="{% url 'editar_perfil' %}">Editar Perfil</a> 
+          </li>
+          <li class="nav-item align-right">
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link">Sair</button>
+            </form>
+          </li>
         </ul>
       </div>
     </nav>
